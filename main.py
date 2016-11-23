@@ -88,6 +88,7 @@ async def on_message(message):
             elif cmd.name == 'log':
                 shiori.log = message.channel
                 await shiori.debug(shiori.log)
+                await shiori.debug(message.server.channels)
                 await shiori.say(message.channel, cmd.msg)
             elif cmd.name == 'bye':
                 await shiori.say(message.channel, cmd.msg)
