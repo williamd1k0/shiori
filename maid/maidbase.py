@@ -26,9 +26,8 @@ SOFTWARE.
 import discord
 import asyncio
 import time
-from random import randint
 from .states import State
-from .reminders import *
+from .plugins import *
 
 
 class Maid(object):
@@ -41,18 +40,11 @@ class Maid(object):
         self.loader = loader
         self.lobby = lobby
         self.log = log
-        
-        self.motivate_list = self.loader.load_list('motivacionais')
-        self.presence_list = self.loader.load_list('atividades')
-        self.reminder_dict = self.loader.load_yml('lembretes')
-        self.reminder_list = list()
-
-        for dayk in self.reminder_dict.keys():
-            for hourk in self.reminder_dict[dayk].keys():
-                for rem in self.reminder_dict[dayk][hourk]:
-                    self.reminder_list.append(Reminder(dayk, hourk, rem))
-        self.reminder = ReminderTask(self.conf['tempo']['lembretes'], self.reminder_list, 3)
-
+            
+        plugins = []
+        for Plg in all_plugins:
+            plugins.append(Plg(self))
+        self.plugins = PluginManager(plugins)
 
     async def debug(self, msg):
         print(msg)
@@ -73,11 +65,7 @@ class Maid(object):
     
 
     def get_jobs(self):
-        return (
-            self._motivate_work,
-            self._update_presence,
-            self._check_reminders
-        )
+        return self.plugins.get_jobs()
 
     async def say(self, chan, msg, wait=True):
         if self.state != 'off':
@@ -98,50 +86,3 @@ class Maid(object):
         else:
             await self.bot.change_presence(game=discord.Game(name=game_))
     
-    async def _check_reminders(self):
-        await self.reminder.reminder_task(self._reminder_callback)
-    
-    async def _reminder_callback(self, rem):
-        await self.motivate(rem.msg)
-
-
-    async def _motivate_work(self):
-        await self.bot.wait_until_ready()
-        counter = 0
-        last_index = -1
-        index = -1
-        while not self.bot.is_closed:
-            await self.debug("Work ping %s" % counter)
-            await self.debug("```py\nUP_TIME: {0}min, {1}s\n```".format(*self.uptime()))
-            await self.debug(self.lobby)
-
-            if self.lobby is not None and self.state != 'off':
-                while last_index == index:
-                    index = randint(0, len(self.motivate_list)-1 )
-                last_index = index
-
-                msg = self.motivate_list[index]
-                await self.motivate(msg)
-                counter += 1
-            await asyncio.sleep(60*self.conf['tempo']['frases'])
-    
-
-    async def _update_presence(self):
-        await self.bot.wait_until_ready()
-        counter = 0
-        last_index = -1
-        index = -1
-        while not self.bot.is_closed:
-            await self.debug("Presence ping %s" % counter)
-            await self.debug("```py\nUP_TIME: {0}min, {1}s\n```".format(*self.uptime()))
-
-            if self.state != 'off':
-                while last_index == index:
-                    index = randint(0, len(self.presence_list)-1 )
-                last_index = index
-
-                game = self.presence_list[index]
-                await self.play_game(game)
-                counter += 1
-
-            await asyncio.sleep(60*self.conf['tempo']['atividade'])

@@ -58,9 +58,7 @@ class ReminderTask(object):
 
     def has_reminder_now(self):
         now = []
-        print(self.reminders)
         for rem in self.reminders:
-            print(rem)
             if rem.hour <= datetime.today().hour:
                 now.append(rem)
         self.now = now

@@ -23,16 +23,40 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from .plugins import *
-from .data import *
-from .states import State
-from .maidbase import Maid
-from .drinks import *
-from .commands import Command
+import asyncio
+from random import randint
+from ...plugins import Plugin
 
-__app__     = "Shiori"
-__author__  = "William Tumeo"
-__version__ = 0, 7, 2
+class PresencePlugin(Plugin):
 
-def get_info():
-    return "{0} v{1}.{2}.{3} by {4}".format(__app__, *__version__, __author__)
+    presence_list = None
+
+
+    def __init__(self, maid):
+        super().__init__(maid, 'presence', 'loop')
+
+
+    def load(self):
+        self.presence_list = self.maid.loader.load_list('atividades')
+
+
+    async def loop_callback(self):
+        await self.maid.bot.wait_until_ready()
+        counter = 0
+        last_index = -1
+        index = -1
+        while not self.maid.bot.is_closed:
+            await self.maid.debug("Presence ping %s" % counter)
+            await self.maid.debug("```py\nUP_TIME: {0}min, {1}s\n```".format(*self.maid.uptime()))
+
+            if self.maid.state != 'off':
+                while last_index == index:
+                    index = randint(0, len(self.presence_list)-1 )
+                last_index = index
+
+                game = self.presence_list[index]
+                await self.maid.play_game(game)
+                counter += 1
+
+            await asyncio.sleep(60*self.maid.conf['tempo']['atividade'])
+    

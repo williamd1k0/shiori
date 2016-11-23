@@ -23,16 +23,32 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from .plugins import *
-from .data import *
-from .states import State
-from .maidbase import Maid
-from .drinks import *
-from .commands import Command
+from ...plugins import Plugin
+from .reminders import * 
 
-__app__     = "Shiori"
-__author__  = "William Tumeo"
-__version__ = 0, 7, 2
+class ReminderPlugin(Plugin):
 
-def get_info():
-    return "{0} v{1}.{2}.{3} by {4}".format(__app__, *__version__, __author__)
+    reminder_dict = None
+    reminder_list = None
+    reminder = None
+
+    def __init__(self, maid):
+        super().__init__(maid, 'reminder', 'loop')
+
+
+    def load(self):
+        self.reminder_dict = self.maid.loader.load_yml('lembretes')
+        self.reminder_list = list()
+
+        for dayk in self.reminder_dict.keys():
+            for hourk in self.reminder_dict[dayk].keys():
+                for rem in self.reminder_dict[dayk][hourk]:
+                    self.reminder_list.append(Reminder(dayk, hourk, rem))
+        self.reminder = ReminderTask(self.maid.conf['tempo']['lembretes'], self.reminder_list, 3)
+        print(self.reminder_list)
+
+    async def loop_callback(self):
+        await self.reminder.reminder_task(self._reminder_callback)
+    
+    async def _reminder_callback(self, rem):
+        await self.maid.motivate(rem.msg)

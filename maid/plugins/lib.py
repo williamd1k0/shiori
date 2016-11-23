@@ -23,16 +23,43 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from .plugins import *
-from .data import *
-from .states import State
-from .maidbase import Maid
-from .drinks import *
-from .commands import Command
+class Plugin(object):
 
-__app__     = "Shiori"
-__author__  = "William Tumeo"
-__version__ = 0, 7, 2
+    def __init__(self, maid, name, type_):
+        self.maid = maid
+        self.name = name
+        self.type = type_
 
-def get_info():
-    return "{0} v{1}.{2}.{3} by {4}".format(__app__, *__version__, __author__)
+    def load(self):
+        pass
+
+    def update_data(self):
+        pass
+
+    def loop_callback(self):
+        pass
+
+
+class PluginManager(object):
+
+    def __init__(self, plugins, auto_load=True):
+        self.plugins = plugins
+        if auto_load:
+            self.load()
+
+    def load(self):
+        for pl in self.plugins:
+            pl.load()
+
+    def update_data(self):
+        pass
+
+    def get_jobs(self):
+        jobs = []
+        for pl in self.plugins:
+            if pl.type == 'loop':
+                jobs.append(pl.loop_callback)
+        return jobs
+
+    def get_commands(self):
+        pass

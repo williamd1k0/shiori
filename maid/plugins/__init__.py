@@ -23,16 +23,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from .plugins import *
-from .data import *
-from .states import State
-from .maidbase import Maid
-from .drinks import *
-from .commands import Command
+# Base lib for plugins
+from .lib import Plugin, PluginManager
 
-__app__     = "Shiori"
-__author__  = "William Tumeo"
-__version__ = 0, 7, 2
+# Register plugins
+from .reminder import ReminderPlugin
+from .presence import PresencePlugin
+from .motivate import MotivatePlugin
 
-def get_info():
-    return "{0} v{1}.{2}.{3} by {4}".format(__app__, *__version__, __author__)
+all_plugins = [
+    ReminderPlugin,
+    PresencePlugin,
+    MotivatePlugin
+]
