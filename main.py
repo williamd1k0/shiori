@@ -19,15 +19,17 @@ DATA = args.path
 CONF = None
 REM = None
 CONF_F = 'configs.yml'
+MODE = 'local'
 
 if args.remote:
-    REM = maid.DataDownload(DATA)
-    CONF_F = REM.download(args.urlprefix+'/'+CONF_F)
+    MODE = 'remote'
+    REM = maid.DataDownload(DATA, args.urlprefix)
+    CONF_F = REM.download(CONF_F)
 
 with open(os.path.join(DATA, CONF_F), 'r') as cf:
     CONF = yaml.load(cf.read())
 del cf
-
+CONF['url-prefix'] = args.urlprefix
 print(CONF)
 sys.exit(0)
 
@@ -57,7 +59,7 @@ maid.Command('bye',
 
 bot = discord.Client()
 
-shiori = maid.Maid(bot, CONF)
+shiori = maid.Maid(bot, CONF, DataLoader(CONF, MODE, DATA))
 
 
 @bot.event

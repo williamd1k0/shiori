@@ -16,9 +16,10 @@ class DataDownload(object):
 
     def download(self, url, desc=None, progress=True):
         try:
-            u = request.urlopen(url)
+            print(self.prefix)
+            u = request.urlopen(self.prefix+'/'+url)
 
-            scheme, netloc, path, query, fragment = parse.urlsplit(url)
+            scheme, netloc, path, query, fragment = parse.urlsplit(self.prefix+'/'+url)
             filename = os.path.basename(path)
             if not filename:
                 filename = 'downloaded.file'
@@ -62,7 +63,36 @@ class DataDownload(object):
 
 
 class DataLoader(object):
-    pass
+
+
+    def __init__(self, conflist, mode='local', path=''):
+        self.conflist = conflist
+        self.mode = mode
+        self.path = path
+        dl = DataDownload(path, conflist['url-prefix'])
+
+
+    def load_data(self, lst):
+        if self.mode == 'local':
+            return self.load_local(self.conflist[lst])
+        elif self.mode == 'remote':
+            return self.load_local(self.load_remote(self.conflist[lst]))
+    
+    def load_local(self, dataf):
+        dt = None
+        with open(os.path.join(self.path, dataf), 'r', encoding='utf-8') as l:
+            dt = l.read()
+        del lst
+        return dt
+
+    def load_remote(self, dataf):
+        return self.dl.download(dataf, dataf)
+    
+    def load_list(self, fi):
+        return self.load_data(fi).split('\n')
+    
+    def load_yml(self, fi):
+        return yaml.load(self.load_data(fi))
 
 
 if __name__ == '__main__':

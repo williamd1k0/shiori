@@ -9,17 +9,18 @@ from .reminders import *
 
 class Maid(object):
 
-    def __init__(self, bot, conf, lobby=None, log=None):
+    def __init__(self, bot, conf, loader, lobby=None, log=None):
         self.state = State(bot)
         self.start_t = time.time()
         self.bot = bot
         self.conf = conf
+        self.loader = loader
         self.lobby = lobby
         self.log = log
         
-        self.motivate_list = self.load_list('motivacionais')
-        self.presence_list = self.load_list('atividades')
-        self.reminder_dict = self.load_yml('lembretes')
+        self.motivate_list = self.loader.load_list('motivacionais')
+        self.presence_list = self.loader.load_list('atividades')
+        self.reminder_dict = self.loader.load_yml('lembretes')
         self.reminder_list = list()
 
         for dayk in self.reminder_dict.keys():
@@ -28,19 +29,6 @@ class Maid(object):
                     self.reminder_list.append(Reminder(dayk, hourk, rem))
         self.reminder = ReminderTask(self.conf['tempo']['lembretes'], self.reminder_list, 3)
 
-
-    def load_data(self, lst):
-        dt = None
-        with open(self.conf['listas'][lst], 'r', encoding='utf-8') as l:
-            dt = l.read()
-        del lst
-        return dt
-    
-    def load_list(self, fi):
-        return self.load_data(fi).split('\n')
-    
-    def load_yml(self, fi):
-        return yaml.load(self.load_data(fi))
 
     async def debug(self, msg):
         print(msg)
