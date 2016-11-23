@@ -32,7 +32,7 @@ from .commands import Command
 
 __app__     = "Shiori"
 __author__  = "William Tumeo"
-__version__ = 0, 7, 2
+__version__ = 0, 8, 0
 
 def get_info():
     return "{0} v{1}.{2}.{3} by {4}".format(__app__, *__version__, __author__)
