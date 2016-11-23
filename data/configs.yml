@@ -1,9 +1,9 @@
 # Listas
 listas:
-  motivacionais: data/frases-motivacionais.txt
-  desmotivacionais: data/frases-desmotivacionais.txt
-  atividades: data/atividades.txt
-  lembretes: data/lembretes.txt
+  motivacionais: frases-motivacionais.txt
+  desmotivacionais: frases-desmotivacionais.txt
+  atividades: atividades.txt
+  lembretes: lembretes.yml
 
 # Discord
 discord:

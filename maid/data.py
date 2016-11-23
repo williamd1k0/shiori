@@ -1,4 +1,5 @@
 
+import yaml
 import sys, os, tempfile, logging
 from urllib import request, parse
 
@@ -16,13 +17,13 @@ class DataDownload(object):
 
     def download(self, url, desc=None, progress=True):
         try:
-            print(self.prefix)
-            u = request.urlopen(self.prefix+'/'+url)
+            full_url = self.prefix+'/'+url
+            u = request.urlopen(full_url)
 
-            scheme, netloc, path, query, fragment = parse.urlsplit(self.prefix+'/'+url)
+            scheme, netloc, path, query, fragment = parse.urlsplit(full_url)
             filename = os.path.basename(path)
             if not filename:
-                filename = 'downloaded.file'
+                filename = full_url.split('/')[-1]
             if desc:
                 filename = desc
 
@@ -34,7 +35,7 @@ class DataDownload(object):
                 if meta_length:
                     file_size = int(meta_length[0])
                 if progress:
-                    print(" Downloading: {0} Bytes: {1}".format(desc, file_size))
+                    print(" Downloading: {0} Bytes: {1}".format(filename, file_size))
 
                 file_size_dl = 0
                 block_sz = 8192
@@ -66,10 +67,10 @@ class DataLoader(object):
 
 
     def __init__(self, conflist, mode='local', path=''):
-        self.conflist = conflist
+        self.conflist = conflist['listas']
         self.mode = mode
         self.path = path
-        dl = DataDownload(path, conflist['url-prefix'])
+        self.dl = DataDownload(path, conflist['url-prefix'])
 
 
     def load_data(self, lst):
@@ -82,7 +83,7 @@ class DataLoader(object):
         dt = None
         with open(os.path.join(self.path, dataf), 'r', encoding='utf-8') as l:
             dt = l.read()
-        del lst
+        del l
         return dt
 
     def load_remote(self, dataf):

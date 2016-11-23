@@ -21,6 +21,10 @@ REM = None
 CONF_F = 'configs.yml'
 MODE = 'local'
 
+if args.version:
+    print(maid.get_info())
+    sys.exit(0)
+
 if args.remote:
     MODE = 'remote'
     REM = maid.DataDownload(DATA, args.urlprefix)
@@ -30,8 +34,7 @@ with open(os.path.join(DATA, CONF_F), 'r') as cf:
     CONF = yaml.load(cf.read())
 del cf
 CONF['url-prefix'] = args.urlprefix
-print(CONF)
-sys.exit(0)
+
 
 coffee = maid.Coffee("café preto", 1.5, ["quero cafe", "quero café", "gimme coffee"])
 
@@ -59,7 +62,7 @@ maid.Command('bye',
 
 bot = discord.Client()
 
-shiori = maid.Maid(bot, CONF, DataLoader(CONF, MODE, DATA))
+shiori = maid.Maid(bot, CONF, maid.DataLoader(CONF, MODE, DATA))
 
 
 @bot.event
