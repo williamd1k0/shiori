@@ -88,8 +88,13 @@ async def on_message(message):
             elif cmd.name == 'log':
                 shiori.log = message.channel
                 await shiori.debug(shiori.log)
-                await shiori.debug(message.server.channels)
                 await shiori.say(message.channel, cmd.msg)
+                
+                if 'lobby' in message.server.get_channel(CONF['discord']):
+                    shiori.lobby = message.server.get_channel(CONF['discord']['lobby'])
+                    await shiori.debug(shiori.lobby)
+                    await shiori.start_jobs()
+
             elif cmd.name == 'bye':
                 await shiori.say(message.channel, cmd.msg)
                 await shiori.go_home()
