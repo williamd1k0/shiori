@@ -1,0 +1,16 @@
+# Listas
+listas:
+  motivacionais: data/frases-motivacionais.txt
+  desmotivacionais: data/frases-desmotivacionais.txt
+  atividades: data/atividades.txt
+  lembretes: data/lembretes.txt
+
+# Discord
+discord:
+  token: ''
+
+# Tempo
+tempo:
+  frases: 15
+  atividade: 20
+  lembretes: 30
