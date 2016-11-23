@@ -91,7 +91,7 @@ async def on_message(message):
                 await shiori.say(message.channel, cmd.msg)
                 
                 if 'lobby' in CONF['discord']:
-                    shiori.lobby = message.server.get_channel(CONF['discord']['lobby'])
+                    shiori.lobby = message.server.get_channel(str(CONF['discord']['lobby']))
                     await shiori.debug(shiori.lobby)
                     await shiori.start_jobs()
 
