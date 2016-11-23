@@ -1,5 +1,5 @@
 
-from .download import DataDownload
+from .data import *
 from .states import State
 from .maidbase import Maid
 from .drinks import *
