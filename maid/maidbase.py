@@ -32,7 +32,7 @@ from .plugins import *
 from .commands import Command # will be removed
 
 
-# Legacy commands
+# deprecated/legacy commands
 Command('init', 
     [
     'bom trabalho',
@@ -51,7 +51,7 @@ class Maid(discord.Client):
 
     def __init__(self, conf, loader, lobby=None, log=None):
         super().__init__()
-        self.bot = self # Legacy bot instance
+        self.bot = self # deprecated/legacy bot instance
         self.state = State(self)
         self.start_t = time.time()
         self.conf = conf

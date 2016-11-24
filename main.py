@@ -59,7 +59,7 @@ CONF['url-prefix'] = args.urlprefix
 
 shiori = maid.Maid(CONF, maid.DataLoader(CONF, MODE, DATA))
 
-
+# Deprecated close method
 def shut_down(er):
     print("Estou morrendo :scream:")
     print("```shell\n{0}\n```".format(er))

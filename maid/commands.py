@@ -1,3 +1,4 @@
+# NOTE: This is a deprecated module
 
 """
 MIT License
