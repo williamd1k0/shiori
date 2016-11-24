@@ -25,19 +25,16 @@ SOFTWARE.
 """
 
 import sys
-import time
+import argparse
 import os.path
-import asyncio
-import discord
 import maid
 import yaml
-import argparse
 
 parser = argparse.ArgumentParser(prog="Shiori", description="")
-parser.add_argument("-r","--remote", help="fetch remote data", action="store_true")
-parser.add_argument("-p","--path", metavar="data_path", help="path for data files")
-parser.add_argument("-u","--urlprefix", metavar="url", help="prefix domain for data")
-parser.add_argument("-v","--version", help="show version", action="store_true")
+parser.add_argument("-r", "--remote", help="fetch remote data", action="store_true")
+parser.add_argument("-p", "--path", metavar="data_path", help="path for data files")
+parser.add_argument("-u", "--urlprefix", metavar="url", help="prefix domain for data")
+parser.add_argument("-v", "--version", help="show version", action="store_true")
 args = parser.parse_args()
 
 DATA = args.path
@@ -71,7 +68,7 @@ def shut_down(er):
 try:
     for job in shiori.get_jobs():
         shiori.loop.create_task(job())
-        
+
     shiori.run(CONF['discord']['token'])
 
 except Exception as er:

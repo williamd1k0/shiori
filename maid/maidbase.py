@@ -28,19 +28,13 @@ import asyncio
 import time
 from .states import State
 from .plugins import *
-from .commands import Command
+from .commands import Command # will be removed
 
 Command('init', 
     [
     'bom trabalho',
     '!init'
     ], 'Muito obrigada.')
-
-Command('log', 
-    [
-    'jogue o lixo aqui',
-    '!log'
-    ], 'Tudo bem.')
 
 Command('bye', 
     [
@@ -60,7 +54,8 @@ class Maid(discord.Client):
         self.loader = loader
         self.lobby = lobby
         self.log = log
-            
+        
+        self.cmdtool = CmdTool(self, '!')    
         plugins = []
         for Plg in all_plugins:
             plugins.append(Plg(self))
@@ -79,6 +74,9 @@ class Maid(discord.Client):
             return
 
         if self.user.mentioned_in(message):
+            for mention_call in self.plugins.get_mentions():
+                await mention_call(message)
+
             await self.debug("Mention Check")
             cmd = Command.search(message.content)
             if cmd is not None:
@@ -87,15 +85,6 @@ class Maid(discord.Client):
                     await self.debug(self.lobby)
                     await self.start_jobs()
                     await self.say(message.channel, cmd.msg)
-                elif cmd.name == 'log':
-                    self.log = message.channel
-                    await self.debug(self.log)
-                    await self.say(message.channel, cmd.msg)
-                    
-                    if 'lobby' in self.conf['discord']:
-                        self.lobby = message.server.get_channel(str(self.conf['discord']['lobby']))
-                        await self.debug(self.lobby)
-                        await self.start_jobs()
 
                 elif cmd.name == 'bye':
                     await self.say(message.channel, cmd.msg)

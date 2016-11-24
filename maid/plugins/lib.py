@@ -36,7 +36,10 @@ class Plugin(object):
     def update_data(self):
         pass
 
-    def loop_callback(self):
+    async def loop_callback(self):
+        pass
+
+    async def mention_callback(self, message):
         pass
 
 
@@ -60,6 +63,34 @@ class PluginManager(object):
             if pl.type == 'loop':
                 jobs.append(pl.loop_callback)
         return jobs
+    
+    def get_mentions(self):
+        cmds = []
+        for pl in self.plugins:
+            if pl.type == 'mention':
+                cmds.append(pl.mention_callback)
+        return cmds
 
     def get_commands(self):
         pass
+
+
+class CmdTool(object):
+
+    def __init__(self, maid, prefix='', case_sensitive=False):
+        self.maid = maid
+        self.prefix = prefix
+        self.case_sensitive = case_sensitive
+
+
+    def has_command(self, cmd, msg):
+        if self.case_sensitive:
+            return self.prefix+cmd in msg.content
+        else:
+            return (self.prefix+cmd).lower() in msg.content.lower()
+    
+    def has_commands(self, cmds, msg):
+        for cmd in cmds:
+            if self.has_command(cmd, msg):
+                return True
+        return False
