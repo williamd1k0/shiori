@@ -32,7 +32,7 @@ class ReloadDataPlugin(Plugin):
     msg = None
 
     def __init__(self, maid):
-        super().__init__(maid, 'reload_data', 'mention')
+        super().__init__(maid, 'reload_data', ['mention'])
         self.needs_reload = False
 
     def load(self):

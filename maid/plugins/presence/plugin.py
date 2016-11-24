@@ -33,14 +33,14 @@ class PresencePlugin(Plugin):
 
 
     def __init__(self, maid):
-        super().__init__(maid, 'presence', 'loop')
+        super().__init__(maid, 'presence', ['loop'])
 
 
     def load(self):
         self.presence_list = self.maid.loader.load_list('atividades')
     
     def update_data(self):
-        self.presence_list = self.maid.loader.load_list('atividades')
+        self.load()
 
 
     async def loop_callback(self):

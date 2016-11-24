@@ -33,14 +33,14 @@ class MotivatePlugin(Plugin):
 
 
     def __init__(self, maid):
-        super().__init__(maid, 'presence', 'loop')
+        super().__init__(maid, 'presence', ['loop'])
 
 
     def load(self):
         self.motivate_list = self.maid.loader.load_list('motivacionais')
 
     def update_data(self):
-        self.motivate_list = self.maid.loader.load_list('motivacionais')
+        self.load()
 
 
     async def loop_callback(self):

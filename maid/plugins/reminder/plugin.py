@@ -34,7 +34,7 @@ class ReminderPlugin(Plugin):
     reminders = None
 
     def __init__(self, maid):
-        super().__init__(maid, 'reminder', 'loop')
+        super().__init__(maid, 'reminder', ['loop'])
         self.reminders = []
 
 

@@ -27,11 +27,11 @@ import asyncio
 
 class Plugin(object):
 
-    def __init__(self, maid, name, type_):
+    def __init__(self, maid, name, types):
         self.tasks = []
         self.maid = maid
         self.name = name
-        self.type = type_
+        self.types = types
         self.needs_reload = True
 
     def load(self):
@@ -70,14 +70,14 @@ class PluginManager(object):
     def get_job_plugins(self):
         jobs = []
         for pl in self.plugins:
-            if pl.type == 'loop':
+            if 'loop' in pl.types:
                 jobs.append(pl)
         return jobs
     
     def get_mentions(self):
         cmds = []
         for pl in self.plugins:
-            if pl.type == 'mention':
+            if 'mention' in pl.types:
                 cmds.append(pl.mention_callback)
         return cmds
 
