@@ -48,4 +48,6 @@ class Coffee(Drink):
 
     def consume(self):
         self.quantity -= 0.2
-    
+
+if __name__ == '__main__':
+    coffee = Coffee("café preto", 1.5, ["quero cafe", "quero café", "gimme coffee"])
