@@ -30,6 +30,8 @@ import os.path
 import maid
 import yaml
 
+
+# Add cli commands
 parser = argparse.ArgumentParser(prog="Shiori", description="")
 parser.add_argument("-r", "--remote", help="fetch remote data", action="store_true")
 parser.add_argument("-p", "--path", metavar="data_path", help="path for data files")
@@ -39,25 +41,31 @@ args = parser.parse_args()
 
 DATA = args.path
 CONF = None
-REM = None
 CONF_F = 'configs.yml'
 MODE = 'local'
 
-if args.version:
+
+def print_info():
     print(maid.get_info())
     sys.exit(0)
 
-if args.remote:
+def set_remote():
+    global MODE
+    global CONF_F
+
     MODE = 'remote'
-    REM = maid.DataDownload(DATA, args.urlprefix)
-    CONF_F = REM.download(CONF_F)
+    remote = maid.DataDownload(DATA, args.urlprefix)
+    CONF_F = remote.download(CONF_F)
 
-with open(os.path.join(DATA, CONF_F), 'r') as cf:
-    CONF = yaml.load(cf.read())
-del cf
-CONF['url-prefix'] = args.urlprefix
+def set_configs(remote=False):
+    global CONF
 
-shiori = maid.Maid(CONF, maid.DataLoader(CONF, MODE, DATA))
+    with open(os.path.join(DATA, CONF_F), 'r') as cf:
+        CONF = yaml.load(cf.read())
+    del cf
+    if remote:
+        CONF['url-prefix'] = args.urlprefix
+
 
 # Deprecated close method
 def shut_down(er):
@@ -65,9 +73,23 @@ def shut_down(er):
     print("```shell\n{0}\n```".format(er))
     shiori.close()
 
-try:
+
+def start_shiori():
+    shiori = maid.Maid(CONF, maid.DataLoader(CONF, MODE, DATA))
     shiori.create_tasks()
     shiori.run(CONF['discord']['token'])
 
-except Exception as er:
-    shut_down(er)
+
+if __name__ == '__main__':
+    if args.version:
+        print_info()
+    if args.remote:
+        set_remote()
+        set_configs(True)
+    else:
+        set_configs()
+
+    try:
+        start_shiori()
+    except Exception as er:
+        shut_down(er)
