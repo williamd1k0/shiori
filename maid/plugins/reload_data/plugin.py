@@ -23,43 +23,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import asyncio
-from random import randint
 from ...plugins import Plugin
 
-class PresencePlugin(Plugin):
 
-    presence_list = None
+class ReloadDataPlugin(Plugin):
 
+    terms = None
+    msg = None
 
     def __init__(self, maid):
-        super().__init__(maid, 'presence', 'loop')
-
+        super().__init__(maid, 'reload_data', 'mention')
+        self.needs_reload = False
 
     def load(self):
-        self.presence_list = self.maid.loader.load_list('atividades')
-    
-    def update_data(self):
-        self.presence_list = self.maid.loader.load_list('atividades')
+        self.terms = ['reload-data', 'reload.data']
+        self.msg = 'Dados atualizados!'
 
 
-    async def loop_callback(self):
-        await self.maid.bot.wait_until_ready()
-        counter = 0
-        last_index = -1
-        index = -1
-        while not self.maid.bot.is_closed:
-            await self.maid.debug("Presence ping %s" % counter)
-            await self.maid.debug("```py\nUP_TIME: {0}min, {1}s\n```".format(*self.maid.uptime()))
-
-            if self.maid.state != 'off':
-                while last_index == index:
-                    index = randint(0, len(self.presence_list)-1 )
-                last_index = index
-
-                game = self.presence_list[index]
-                await self.maid.play_game(game)
-                counter += 1
-
-            await asyncio.sleep(60*self.maid.conf['tempo']['atividade'])
-    
+    async def mention_callback(self, message):
+        if self.maid.cmdtool.has_commands(self.terms, message):
+            self.maid.plugins.update_data()
+            await self.maid.say(message.channel, self.msg.format(message.channel))

@@ -30,6 +30,8 @@ from .states import State
 from .plugins import *
 from .commands import Command # will be removed
 
+
+# Legacy commands
 Command('init', 
     [
     'bom trabalho',
@@ -43,11 +45,12 @@ Command('bye',
     '!bye'
     ], 'Muito obrigada. Até amanhã.')
 
+
 class Maid(discord.Client):
 
     def __init__(self, conf, loader, lobby=None, log=None):
         super().__init__()
-        self.bot = self
+        self.bot = self # Legacy bot instance
         self.state = State(self)
         self.start_t = time.time()
         self.conf = conf
@@ -127,8 +130,12 @@ class Maid(discord.Client):
         await self.state.set_state('on')
     
 
-    def get_jobs(self):
-        return self.plugins.get_jobs()
+    def get_job_plugins(self):
+        return self.plugins.get_job_plugins()
+    
+    def create_tasks(self):
+        for job in self.get_job_plugins():
+            job.tasks.append(self.loop.create_task(job.loop_callback()))
 
     async def say(self, chan, msg, wait=True):
         if self.state != 'off':

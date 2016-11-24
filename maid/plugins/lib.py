@@ -23,17 +23,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import asyncio
+
 class Plugin(object):
 
     def __init__(self, maid, name, type_):
+        self.tasks = []
         self.maid = maid
         self.name = name
         self.type = type_
+        self.needs_reload = True
 
     def load(self):
         pass
 
     def update_data(self):
+        pass
+    
+    async def new_task(self):
         pass
 
     async def loop_callback(self):
@@ -55,13 +62,16 @@ class PluginManager(object):
             pl.load()
 
     def update_data(self):
-        pass
+        for pl in self.plugins:
+            print('Updating {0}'.format(pl))
+            if pl.needs_reload:
+                pl.update_data()
 
-    def get_jobs(self):
+    def get_job_plugins(self):
         jobs = []
         for pl in self.plugins:
             if pl.type == 'loop':
-                jobs.append(pl.loop_callback)
+                jobs.append(pl)
         return jobs
     
     def get_mentions(self):

@@ -31,10 +31,12 @@ from .reminder import ReminderPlugin
 from .presence import PresencePlugin
 from .motivate import MotivatePlugin
 from .debug import DebugPlugin
+from .reload_data import ReloadDataPlugin
 
 all_plugins = [
-    ReminderPlugin,
     PresencePlugin,
     MotivatePlugin,
-    DebugPlugin
+    DebugPlugin,
+    ReloadDataPlugin,
+    ReminderPlugin
 ]

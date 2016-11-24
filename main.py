@@ -66,9 +66,7 @@ def shut_down(er):
     shiori.close()
 
 try:
-    for job in shiori.get_jobs():
-        shiori.loop.create_task(job())
-
+    shiori.create_tasks()
     shiori.run(CONF['discord']['token'])
 
 except Exception as er:

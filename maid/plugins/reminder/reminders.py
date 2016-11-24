@@ -40,6 +40,7 @@ class Reminder(object):
 class ReminderTask(object):
 
     def __init__(self, time, rlist, x=1):
+        self.stop = False
         self.time = time
         self.reminders = None
         self.now = None
@@ -67,7 +68,7 @@ class ReminderTask(object):
         return False
 
     async def reminder_task(self, callback):
-        while True:
+        while not self.stop:
             if self.has_reminder_today():
                 if self.has_reminder_now():
                     for rem in self.now:
@@ -75,5 +76,6 @@ class ReminderTask(object):
                             rem.x += 1
                             await callback(rem)
             await asyncio.sleep(60*self.time)
+        print('Reminder Done')
         
     

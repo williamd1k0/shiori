@@ -39,6 +39,9 @@ class MotivatePlugin(Plugin):
     def load(self):
         self.motivate_list = self.maid.loader.load_list('motivacionais')
 
+    def update_data(self):
+        self.motivate_list = self.maid.loader.load_list('motivacionais')
+
 
     async def loop_callback(self):
         await self.maid.bot.wait_until_ready()

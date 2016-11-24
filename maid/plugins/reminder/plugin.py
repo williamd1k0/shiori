@@ -23,6 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import asyncio
 from ...plugins import Plugin
 from .reminders import * 
 
@@ -30,10 +31,11 @@ class ReminderPlugin(Plugin):
 
     reminder_dict = None
     reminder_list = None
-    reminder = None
+    reminders = None
 
     def __init__(self, maid):
         super().__init__(maid, 'reminder', 'loop')
+        self.reminders = []
 
 
     def load(self):
@@ -44,11 +46,24 @@ class ReminderPlugin(Plugin):
             for hourk in self.reminder_dict[dayk].keys():
                 for rem in self.reminder_dict[dayk][hourk]:
                     self.reminder_list.append(Reminder(dayk, hourk, rem))
-        self.reminder = ReminderTask(self.maid.conf['tempo']['lembretes'], self.reminder_list, 3)
-        print(self.reminder_list)
+        self.reminders.append(ReminderTask(self.maid.conf['tempo']['lembretes'], self.reminder_list, 3))
+
+    def update_data(self):
+        self.reminders[-1].stop = True
+        self.load()
+        self.tasks.append(self.maid.loop.create_task(self.loop_callback()))
+
+    async def new_task(self):
+        print("Starting new task")
+        while not self.tasks[-1].done():
+            print('Waiting for {0}'.format(self.tasks[-1]))
+            await asyncio.sleep(60)
+        self.load()
+        self.tasks.append(self.maid.loop.create_task(self.loop_callback()))
 
     async def loop_callback(self):
-        await self.reminder.reminder_task(self._reminder_callback)
+        await self.reminders[-1].reminder_task(self._reminder_callback)
     
     async def _reminder_callback(self, rem):
         await self.maid.motivate(rem.msg)
+        
