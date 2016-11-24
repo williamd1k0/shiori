@@ -50,7 +50,7 @@ class PresencePlugin(Plugin):
         index = -1
         while not self.maid.bot.is_closed:
             await self.maid.debug("Presence ping %s" % counter)
-            await self.maid.debug("```py\nUP_TIME: {0}min, {1}s\n```".format(*self.maid.uptime()))
+            await self.maid.debug("UP_TIME: {0}min, {1}s".format(*self.maid.uptime()))
 
             if self.maid.state != 'off':
                 while last_index == index:

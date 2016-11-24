@@ -23,25 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from ...plugins import Plugin
-
-
-class ReloadDataPlugin(Plugin):
-
-    terms = None
-    msg = None
-
-    def __init__(self, maid):
-        super().__init__(maid, 'reload_data', 'mention')
-        self.needs_reload = False
-
-    def load(self):
-        self.terms = ['reload-data', 'reload.data']
-        self.msg = 'Dados atualizados!'
-
-
-    async def mention_callback(self, message):
-        if self.maid.cmdtool.has_commands(self.terms, message):
-            self.maid.send_typing(message.channel)
-            self.maid.plugins.update_data()
-            await self.maid.say(message.channel, self.msg.format(message.channel))
+def code_block(string, lang=''):
+    return "```{0}\n{1}\n```".format(lang, string)
+    

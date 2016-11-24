@@ -26,6 +26,7 @@ SOFTWARE.
 import discord
 import asyncio
 import time
+from .utils import code_block
 from .states import State
 from .plugins import *
 from .commands import Command # will be removed
@@ -115,7 +116,7 @@ class Maid(discord.Client):
     async def debug(self, msg):
         print(msg)
         if self.log is not None:
-            await self.say(self.log, msg, False)
+            await self.say(self.log, code_block(msg, 'yaml'), False)
 
     def uptime(self):
         return divmod(abs(time.time() - self.start_t), 60)
