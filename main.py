@@ -27,8 +27,9 @@ SOFTWARE.
 import sys
 import argparse
 import os.path
-import maid
-import yaml
+from maid import Maid, get_info
+from maid import DataLoader, DataDownload
+from yaml import load as yaml_load
 
 
 # Add cli commands
@@ -46,36 +47,42 @@ MODE = 'local'
 
 
 def print_info():
-    print(maid.get_info())
+    """Print version info and exit program."""
+    print(get_info())
     sys.exit(0)
 
+
 def set_remote():
+    """Fetch and save config file from remote server."""
     global MODE
     global CONF_F
 
     MODE = 'remote'
-    remote = maid.DataDownload(DATA, args.urlprefix)
+    remote = DataDownload(DATA, args.urlprefix)
     CONF_F = remote.download(CONF_F)
 
+
 def set_configs(remote=False):
+    """Load local config file and save to global CONF."""
     global CONF
 
     with open(os.path.join(DATA, CONF_F), 'r') as cf:
-        CONF = yaml.load(cf.read())
+        CONF = yaml_load(cf.read())
     del cf
     if remote:
         CONF['url-prefix'] = args.urlprefix
 
 
-# Deprecated close method
 def shut_down(er):
+    """Deprecated close method"""
     print("Estou morrendo :scream:")
     print("```shell\n{0}\n```".format(er))
     shiori.close()
 
 
 def start_shiori():
-    shiori = maid.Maid(CONF, maid.DataLoader(CONF, MODE, DATA))
+    """Start Shiori bot"""
+    shiori = Maid(CONF, DataLoader(CONF, MODE, DATA))
     shiori.create_tasks()
     shiori.run(CONF['discord']['token'])
 
