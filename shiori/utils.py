@@ -23,6 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-def code_block(string, lang=''):
+def code_block(string, lang='') -> str:
+    """Format a string using Markdown codeblock"""
     return "```{0}\n{1}\n```".format(lang, string)
     

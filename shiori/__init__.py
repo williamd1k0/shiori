@@ -1,4 +1,4 @@
-
+# Author: William Tumeo <http://github.com/williamd1k0>.
 """
 MIT License
 
@@ -28,12 +28,16 @@ from .plugins import *
 from .data import *
 from .states import State
 from .maidbase import Maid
-from .drinks import *
-from .commands import Command
+from .drinks import * # deprecated
+from .commands import Command # deprecated
 
-__app__     = "Shiori"
-__author__  = "William Tumeo"
+
+# Module info
+__app__ = "Shiori"
+__author__ = "William Tumeo <http://github.com/williamd1k0>"
 __version__ = 0, 8, 0
 
+
 def get_info():
+    """Return maid module version info."""
     return "{0} v{1}.{2}.{3} by {4}".format(__app__, *__version__, __author__)
