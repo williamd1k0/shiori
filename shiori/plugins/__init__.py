@@ -28,14 +28,14 @@ from .lib import Plugin, PluginManager, CmdTool
 
 # Register plugins
 from .reminder import ReminderPlugin
-from .presence import PresencePlugin
+from .playingjooj import PlayingJoojPlugin
 from .motivate import MotivatePlugin
 from .debug import DebugPlugin
 from .reload_data import ReloadDataPlugin
 from .cleverbot import CleverPlugin
 
 all_plugins = [
-    PresencePlugin,
+    PlayingJoojPlugin,
     MotivatePlugin,
     DebugPlugin,
     ReloadDataPlugin,

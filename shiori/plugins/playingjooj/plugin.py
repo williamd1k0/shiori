@@ -27,7 +27,7 @@ import asyncio
 from random import randint
 from ...plugins import Plugin
 
-class PresencePlugin(Plugin):
+class PlayingJoojPlugin(Plugin):
 
     presence_list = None
 

@@ -23,4 +23,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from .plugin import PresencePlugin
+from .plugin import PlayingJoojPlugin
