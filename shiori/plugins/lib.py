@@ -28,11 +28,16 @@ import asyncio
 class Plugin(object):
 
     def __init__(self, maid, name, types):
+        self.data = None
+        if name in maid.conf['plugins']:
+            self.data = maid.conf['plugins'][name]
         self.tasks = []
         self.maid = maid
         self.name = name
         self.types = types
         self.needs_reload = True
+        self.mode = True
+        self.interval = 1
 
     def load(self):
         pass

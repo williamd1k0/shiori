@@ -81,7 +81,6 @@ class Maid(discord.Client):
             for mention_call in self.plugins.get_mentions():
                 await mention_call(message)
 
-            await self.debug("Mention Check")
             cmd = Command.search(message.content)
             if cmd is not None:
                 if cmd.name == 'init':
@@ -142,7 +141,7 @@ class Maid(discord.Client):
         if self.state != 'off':
             await self.bot.send_typing(chan)
             if wait:
-                await asyncio.sleep(4)
+                await asyncio.sleep(1)
             await self.bot.send_message(chan, msg)
 
 

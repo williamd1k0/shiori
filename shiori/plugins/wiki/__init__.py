@@ -23,24 +23,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-# Base lib for plugins
-from .lib import Plugin, PluginManager, CmdTool
-
-# Register plugins
-from .reminder import ReminderPlugin
-from .playingjooj import PlayingJoojPlugin
-from .motivate import MotivatePlugin
-from .debug import DebugPlugin
-from .reload_data import ReloadDataPlugin
-from .cleverbot import CleverPlugin
-from .wiki import WikiPlugin
-
-all_plugins = [
-    PlayingJoojPlugin,
-    MotivatePlugin,
-    DebugPlugin,
-    ReloadDataPlugin,
-    ReminderPlugin,
-    CleverPlugin,
-    WikiPlugin
-]
+from .plugin import WikiPlugin
