@@ -32,11 +32,13 @@ from .presence import PresencePlugin
 from .motivate import MotivatePlugin
 from .debug import DebugPlugin
 from .reload_data import ReloadDataPlugin
+from .cleverbot import CleverPlugin
 
 all_plugins = [
     PresencePlugin,
     MotivatePlugin,
     DebugPlugin,
     ReloadDataPlugin,
-    ReminderPlugin
+    ReminderPlugin,
+    CleverPlugin
 ]

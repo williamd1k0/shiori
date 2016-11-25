@@ -94,9 +94,9 @@ class Maid(discord.Client):
                     await self.say(message.channel, cmd.msg)
                     await self.go_home()
 
-            else:
-                msg = 'Alguém me chamou? Como posso ser útil?'.format(message)
-                await self.send_message(message.channel, msg)
+            #else:
+            #    msg = 'Alguém me chamou? Como posso ser útil?'.format(message)
+            #    await self.send_message(message.channel, msg)
 
         # for term in coffee.terms:
         #     if term in message.content:

@@ -23,30 +23,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from ...plugins import Plugin
-
-
-class DebugPlugin(Plugin):
-
-    terms = None
-    msg = None
-
-    def __init__(self, maid):
-        super().__init__(maid, 'debug', ['mention'])
-        self.needs_reload = False
-
-    def load(self):
-        self.terms = ['log', 'debug']
-        self.msg = 'Jogando o lixo em {0}'
-
-
-    async def mention_callback(self, message):
-        if self.maid.cmdtool.has_commands(self.terms, message):
-            self.maid.log = message.channel
-            await self.maid.debug(self.maid.log)
-            await self.maid.say(message.channel, self.msg.format(message.channel))
-
-            if 'lobby' in self.maid.conf['discord']:
-                self.maid.lobby = message.server.get_channel(str(self.maid.conf['discord']['lobby']))
-                await self.maid.debug(self.maid.lobby)
-                await self.maid.start_jobs()
+from .plugin import CleverPlugin
