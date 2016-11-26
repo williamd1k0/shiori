@@ -26,6 +26,7 @@ SOFTWARE.
 import asyncio
 
 class Plugin(object):
+    """Base class for all plugins."""
 
     def __init__(self, maid, name, types):
         self.data = None
@@ -39,32 +40,55 @@ class Plugin(object):
         self.mode = True
         self.interval = 1
 
+
+    def __repr__(self):
+        return '<Plugin:{0}>'.format(self.name)
+
+    def __str__(self):
+        return repr(self)
+
+
     def load(self):
+        """Abstract load plugin."""
         pass
+
 
     def update_data(self):
+        """Abstract update data files of plugin."""
         pass
-    
+
+
     async def new_task(self):
+        """Abstract create new task for plugin."""
         pass
+
 
     async def loop_callback(self):
+        """Abstract callback for loop plugins."""
         pass
 
+
     async def mention_callback(self, message):
+        """Abstract callback for mention plugins."""
         pass
 
 
 class PluginManager(object):
+
 
     def __init__(self, plugins, auto_load=True):
         self.plugins = plugins
         if auto_load:
             self.load()
 
+
     def load(self):
         for pl in self.plugins:
+            if not issubclass(pl.__class__, Plugin):
+                raise NotAPluginException()
+            print('Loading {0}'.format(pl))
             pl.load()
+
 
     def update_data(self):
         for pl in self.plugins:
@@ -72,22 +96,30 @@ class PluginManager(object):
             if pl.needs_reload:
                 pl.update_data()
 
+
     def get_job_plugins(self):
         jobs = []
         for pl in self.plugins:
             if 'loop' in pl.types:
                 jobs.append(pl)
         return jobs
-    
+
+
     def get_mentions(self):
         cmds = []
         for pl in self.plugins:
-            if 'mention' in pl.types:
-                cmds.append(pl.mention_callback)
+            if pl.mode:
+                if 'mention' in pl.types:
+                    cmds.append(pl.mention_callback)
         return cmds
+
 
     def get_commands(self):
         pass
+
+
+class NotAPluginException(Exception):
+    pass
 
 
 class CmdTool(object):

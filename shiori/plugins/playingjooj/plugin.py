@@ -51,7 +51,7 @@ class PlayingJoojPlugin(Plugin):
         counter = 0
         last_index = -1
         index = -1
-        while not self.maid.bot.is_closed:
+        while not self.maid.bot.is_closed and self.mode:
             await self.maid.debug("Presence ping %s" % counter)
             await self.maid.debug("UP_TIME: {0}min, {1}s".format(*self.maid.uptime()))
 

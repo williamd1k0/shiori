@@ -29,9 +29,11 @@ from .reminders import *
 
 class ReminderPlugin(Plugin):
 
+
     reminder_dict = None
     reminder_list = None
     reminders = None
+
 
     def __init__(self, maid):
         super().__init__(maid, 'reminder', ['loop'])
@@ -50,10 +52,12 @@ class ReminderPlugin(Plugin):
                     self.reminder_list.append(Reminder(dayk, hourk, rem))
         self.reminders.append(ReminderTask(self.interval, self.reminder_list, 3))
 
+
     def update_data(self):
         self.reminders[-1].stop = True
         self.load()
         self.tasks.append(self.maid.loop.create_task(self.loop_callback()))
+
 
     async def new_task(self):
         print("Starting new task")
@@ -63,8 +67,10 @@ class ReminderPlugin(Plugin):
         self.load()
         self.tasks.append(self.maid.loop.create_task(self.loop_callback()))
 
+
     async def loop_callback(self):
         await self.reminders[-1].reminder_task(self._reminder_callback)
+
 
     async def _reminder_callback(self, rem):
         await self.maid.motivate(rem.msg)
