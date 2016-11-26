@@ -64,7 +64,6 @@ class Maid(discord.Client):
         for Plg in all_plugins:
             plugins.append(Plg(self))
         self.plugins = PluginManager(plugins)
-    
 
     """
      * Client Events

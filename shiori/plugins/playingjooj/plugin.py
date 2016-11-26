@@ -33,12 +33,15 @@ class PlayingJoojPlugin(Plugin):
 
 
     def __init__(self, maid):
-        super().__init__(maid, 'presence', ['loop'])
+        super().__init__(maid, 'playingjooj', ['loop'])
 
 
     def load(self):
-        self.presence_list = self.maid.loader.load_list('atividades')
-    
+        self.mode = self.data.get('mode', False)
+        self.interval = self.data.get('interval', 30)
+        self.presence_list = self.maid.loader.load_list(self.data.get('data'))
+
+
     def update_data(self):
         self.load()
 
@@ -61,5 +64,5 @@ class PlayingJoojPlugin(Plugin):
                 await self.maid.play_game(game)
                 counter += 1
 
-            await asyncio.sleep(60*self.maid.conf['tempo']['atividade'])
+            await asyncio.sleep(60*self.interval)
     

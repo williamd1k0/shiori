@@ -33,11 +33,14 @@ class MotivatePlugin(Plugin):
 
 
     def __init__(self, maid):
-        super().__init__(maid, 'presence', ['loop'])
+        super().__init__(maid, 'motivate', ['loop'])
 
 
     def load(self):
-        self.motivate_list = self.maid.loader.load_list('motivacionais')
+        self.mode = self.data.get('mode', False)
+        self.interval = self.data.get('interval', 20)
+        self.motivate_list = self.maid.loader.load_list(self.data.get('data'))
+
 
     def update_data(self):
         self.load()
@@ -55,10 +58,11 @@ class MotivatePlugin(Plugin):
 
             if self.maid.lobby is not None and self.maid.state != 'off':
                 while last_index == index:
-                    index = randint(0, len(self.motivate_list)-1 )
-                last_index = index
+                    index = randint(0, len(self.motivate_list)-1)
 
+                last_index = index
                 msg = self.motivate_list[index]
                 await self.maid.motivate(msg)
                 counter += 1
-            await asyncio.sleep(60*self.maid.conf['tempo']['frases'])
+
+            await asyncio.sleep(60*self.interval)

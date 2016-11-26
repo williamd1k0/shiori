@@ -37,11 +37,10 @@ class WikiPlugin(Plugin):
 
 
     def load(self):
-        print(self.data)
         self.mode = self.data.get('mode', False)
         self.interval = self.data.get('interval', 60)
-        wikipedia.set_lang("pt")
-        print('loaded')
+        wikipedia.set_lang(self.data.get('lang', 'pt'))
+
 
     def update_data(self):
         self.load()

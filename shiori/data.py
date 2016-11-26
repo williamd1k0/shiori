@@ -23,13 +23,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import yaml
-import sys, os, tempfile, logging
+import os
 from urllib import request, parse
+import yaml
 
 
 class DataDownload(object):
-
+    """Class to download remote data."""
 
     def __init__(self, path, url_prefix=''):
         if not os.path.isdir(path):
@@ -40,6 +40,7 @@ class DataDownload(object):
 
 
     def download(self, url, desc=None, progress=True):
+        """Download and save data."""
         try:
             full_url = self.prefix+'/'+url
             u = request.urlopen(full_url)
@@ -82,45 +83,56 @@ class DataDownload(object):
 
         except Exception as e:
             raise
-        
+
         self.last = filename
         return filename
 
 
+
 class DataLoader(object):
+    """Class to load program data."""
 
-
-    def __init__(self, conflist, mode='local', path=''):
-        self.conflist = conflist['listas']
+    def __init__(self, conf, mode='local', path=''):
         self.mode = mode
         self.path = path
-        self.dl = DataDownload(path, conflist['url-prefix'])
+        self.dld = DataDownload(path, conf.get('url-prefix', ''))
 
 
-    def load_data(self, lst):
+    def load_data(self, fpath):
+        """Load locar or remote data."""
         if self.mode == 'local':
-            return self.load_local(self.conflist[lst])
+            return self.load_local(fpath)
         elif self.mode == 'remote':
-            return self.load_local(self.load_remote(self.conflist[lst]))
-    
+            return self.load_local(self.load_remote(fpath))
+
+
     def load_local(self, dataf):
+        """Load local data."""
         dt = None
         with open(os.path.join(self.path, dataf), 'r', encoding='utf-8') as l:
             dt = l.read()
         del l
         return dt
 
+
     def load_remote(self, dataf):
-        return self.dl.download(dataf, dataf)
-    
-    def load_list(self, fi):
-        return self.load_data(fi).split('\n')
-    
-    def load_yml(self, fi):
-        return yaml.load(self.load_data(fi))
+        """Load remote data."""
+        return self.dld.download(dataf, dataf)
+
+
+    def load_list(self, fpath):
+        """Load and parse data using linebreak."""
+        return self.load_data(fpath).split('\n')
+
+
+    def load_yml(self, fpath):
+        """Load and parse data to yaml."""
+        return yaml.load(self.load_data(fpath))
+
 
 
 if __name__ == '__main__':
-    
+    import sys
+
     ddl = DataDownload('temp')
     ddl.download(sys.argv[1], sys.argv[2])

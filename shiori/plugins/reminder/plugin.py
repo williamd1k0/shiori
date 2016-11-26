@@ -39,14 +39,16 @@ class ReminderPlugin(Plugin):
 
 
     def load(self):
-        self.reminder_dict = self.maid.loader.load_yml('lembretes')
+        self.mode = self.data.get('mode', False)
+        self.interval = self.data.get('interval', 30)
+        self.reminder_dict = self.maid.loader.load_yml(self.data.get('data'))
         self.reminder_list = list()
 
         for dayk in self.reminder_dict.keys():
             for hourk in self.reminder_dict[dayk].keys():
                 for rem in self.reminder_dict[dayk][hourk]:
                     self.reminder_list.append(Reminder(dayk, hourk, rem))
-        self.reminders.append(ReminderTask(self.maid.conf['tempo']['lembretes'], self.reminder_list, 3))
+        self.reminders.append(ReminderTask(self.interval, self.reminder_list, 3))
 
     def update_data(self):
         self.reminders[-1].stop = True
@@ -63,7 +65,7 @@ class ReminderPlugin(Plugin):
 
     async def loop_callback(self):
         await self.reminders[-1].reminder_task(self._reminder_callback)
-    
+
     async def _reminder_callback(self, rem):
         await self.maid.motivate(rem.msg)
         
