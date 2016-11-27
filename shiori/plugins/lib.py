@@ -24,6 +24,7 @@ SOFTWARE.
 """
 
 import asyncio
+import time
 
 class Plugin(object):
     """Base class for all plugins."""
@@ -86,8 +87,14 @@ class PluginManager(object):
         for pl in self.plugins:
             if not issubclass(pl.__class__, Plugin):
                 raise NotAPluginException()
-            print('Loading {0}'.format(pl))
             pl.load()
+
+
+    def _load(self):
+        print('LOADING {0}'.format(self))
+        init = time.time()
+        self.load()
+        print('LOADED {0} in {1}s'.format(self, time.time()-init))
 
 
     def update_data(self):
@@ -100,8 +107,9 @@ class PluginManager(object):
     def get_job_plugins(self):
         jobs = []
         for pl in self.plugins:
-            if 'loop' in pl.types:
-                jobs.append(pl)
+            if pl.mode:
+                if 'loop' in pl.types:
+                    jobs.append(pl)
         return jobs
 
 

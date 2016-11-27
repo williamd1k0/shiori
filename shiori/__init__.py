@@ -35,7 +35,7 @@ from .commands import Command # deprecated
 # Module info
 __app__ = "Shiori"
 __author__ = "William Tumeo <http://github.com/williamd1k0>"
-__version__ = 0, 10, 0
+__version__ = 0, 10, 1
 
 
 def get_info():
