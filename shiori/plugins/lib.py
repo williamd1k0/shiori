@@ -54,6 +54,14 @@ class Plugin(object):
         pass
 
 
+    def _load(self):
+        """Load backend"""
+        print('LOADING {0}'.format(self))
+        init = time.time()
+        self.load()
+        print('LOADED {0} in {1}s'.format(self, time.time()-init))
+
+
     def update_data(self):
         """Abstract update data files of plugin."""
         pass
@@ -87,14 +95,7 @@ class PluginManager(object):
         for pl in self.plugins:
             if not issubclass(pl.__class__, Plugin):
                 raise NotAPluginException()
-            pl.load()
-
-
-    def _load(self):
-        print('LOADING {0}'.format(self))
-        init = time.time()
-        self.load()
-        print('LOADED {0} in {1}s'.format(self, time.time()-init))
+            pl._load()
 
 
     def update_data(self):
