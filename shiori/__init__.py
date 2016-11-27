@@ -29,7 +29,6 @@ from .data import *
 from .states import State
 from .maidbase import Maid
 from .drinks import * # deprecated
-from .commands import Command # deprecated
 
 
 # Module info

@@ -23,31 +23,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import discord
-import asyncio
 import time
+import asyncio
+import discord
 from .utils import code_block
 from .states import State
 from .plugins import *
-from .commands import Command # will be removed
-
-
-# deprecated/legacy commands
-Command('init', 
-    [
-    'bom trabalho',
-    '!init'
-    ], 'Muito obrigada.')
-
-Command('bye', 
-    [
-    'esta liberada',
-    'está liberada',
-    '!bye'
-    ], 'Muito obrigada. Até amanhã.')
 
 
 class Maid(discord.Client):
+
 
     def __init__(self, conf, loader, lobby=None, log=None):
         super().__init__()
@@ -58,12 +43,13 @@ class Maid(discord.Client):
         self.loader = loader
         self.lobby = lobby
         self.log = log
-        
-        self.cmdtool = CmdTool(self, '!')    
+
+        self.cmdtool = CmdTool(self, '!')
         plugins = []
-        for Plg in all_plugins:
-            plugins.append(Plg(self))
+        for PluginClass in all_plugins:
+            plugins.append(PluginClass(self))
         self.plugins = PluginManager(plugins)
+
 
     """
      * Client Events
@@ -79,18 +65,6 @@ class Maid(discord.Client):
         if self.user.mentioned_in(message):
             for mention_call in self.plugins.get_mentions():
                 await mention_call(message)
-
-            cmd = Command.search(message.content)
-            if cmd is not None:
-                if cmd.name == 'init':
-                    self.lobby = message.channel
-                    await self.debug(self.lobby)
-                    await self.start_jobs()
-                    await self.say(message.channel, cmd.msg)
-
-                elif cmd.name == 'bye':
-                    await self.say(message.channel, cmd.msg)
-                    await self.go_home()
 
             #else:
             #    msg = 'Alguém me chamou? Como posso ser útil?'.format(message)
@@ -110,16 +84,17 @@ class Maid(discord.Client):
         #         await self.send_message(message.channel, msg)
         #         break
 
-    
+
     async def debug(self, msg):
         print(msg)
         if self.log is not None:
             await self.say(self.log, code_block(msg, 'yaml'), False)
 
+
     def uptime(self):
         return divmod(abs(time.time() - self.start_t), 60)
 
-    
+
     async def go_home(self):
         await self.state.set_state('off')
         await self.play_game(None)
