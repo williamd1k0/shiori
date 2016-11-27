@@ -30,7 +30,7 @@ from .lib import Plugin, PluginManager, CmdTool
 from .reminder import ReminderPlugin
 from .playingjooj import PlayingJoojPlugin
 from .motivate import MotivatePlugin
-from .debug import DebugPlugin
+from .commands import CommandsPlugin
 from .reload_data import ReloadDataPlugin
 from .cleverbot import CleverPlugin
 from .wiki import WikiPlugin
@@ -38,7 +38,7 @@ from .wiki import WikiPlugin
 all_plugins = [
     PlayingJoojPlugin,
     MotivatePlugin,
-    DebugPlugin,
+    CommandsPlugin,
     ReloadDataPlugin,
     ReminderPlugin,
     CleverPlugin,

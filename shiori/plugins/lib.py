@@ -23,7 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import asyncio
 import time
 
 class Plugin(object):
@@ -31,14 +30,15 @@ class Plugin(object):
 
     def __init__(self, maid, name, types):
         self.data = None
+        self.mode = False
         if name in maid.conf['plugins']:
             self.data = maid.conf['plugins'][name]
+            self.mode = self.data.get('mode', False)
         self.tasks = []
         self.maid = maid
         self.name = name
         self.types = types
         self.needs_reload = True
-        self.mode = True
         self.interval = 1
 
 
