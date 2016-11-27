@@ -28,13 +28,12 @@ from .plugins import *
 from .data import *
 from .states import State
 from .maidbase import Maid
-from .drinks import * # deprecated
 
 
 # Module info
 __app__ = "Shiori"
 __author__ = "William Tumeo <http://github.com/williamd1k0>"
-__version__ = 0, 10, 3
+__version__ = 0, 11, 0
 
 
 def get_info():

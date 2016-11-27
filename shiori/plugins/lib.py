@@ -31,15 +31,16 @@ class Plugin(object):
     def __init__(self, maid, name, types):
         self.data = None
         self.mode = False
+        self.interval = 1
         if name in maid.conf['plugins']:
             self.data = maid.conf['plugins'][name]
             self.mode = self.data.get('mode', False)
+            self.interval = self.data.get('interval', 1)
         self.tasks = []
         self.maid = maid
         self.name = name
         self.types = types
         self.needs_reload = True
-        self.interval = 1
 
 
     def __repr__(self):
@@ -82,6 +83,11 @@ class Plugin(object):
         pass
 
 
+    async def message_callback(self, message):
+        """Abstract callback for message plugins."""
+        pass
+
+
 class PluginManager(object):
 
 
@@ -115,16 +121,21 @@ class PluginManager(object):
 
 
     def get_mentions(self):
-        cmds = []
+        mentions = []
         for pl in self.plugins:
             if pl.mode:
                 if 'mention' in pl.types:
-                    cmds.append(pl.mention_callback)
-        return cmds
+                    mentions.append(pl)
+        return mentions
 
 
-    def get_commands(self):
-        pass
+    def get_messages(self):
+        msgs = []
+        for pl in self.plugins:
+            if pl.mode:
+                if 'message' in pl.types:
+                    msgs.append(pl)
+        return msgs
 
 
 class NotAPluginException(Exception):
@@ -133,8 +144,7 @@ class NotAPluginException(Exception):
 
 class CmdTool(object):
 
-    def __init__(self, maid, prefix='', case_sensitive=False):
-        self.maid = maid
+    def __init__(self, prefix='', case_sensitive=False):
         self.prefix = prefix
         self.case_sensitive = case_sensitive
 
@@ -150,3 +160,5 @@ class CmdTool(object):
             if self.has_command(cmd, msg):
                 return True
         return False
+
+CMD_NOPREFIX = CmdTool()

@@ -37,8 +37,6 @@ class PlayingJoojPlugin(Plugin):
 
 
     def load(self):
-        self.mode = self.data.get('mode', False)
-        self.interval = self.data.get('interval', 30)
         self.presence_list = self.maid.loader.load_list(self.data.get('data'))
 
 

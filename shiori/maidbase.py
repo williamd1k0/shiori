@@ -28,7 +28,7 @@ import asyncio
 import discord
 from .utils import code_block
 from .states import State
-from .plugins import *
+from .plugins import CmdTool, PluginManager, all_plugins
 
 
 class Maid(discord.Client):
@@ -44,7 +44,7 @@ class Maid(discord.Client):
         self.lobby = lobby
         self.log = log
 
-        self.cmdtool = CmdTool(self, '!')
+        self.cmdtool = CmdTool('!')
         plugins = []
         for PluginClass in all_plugins:
             plugins.append(PluginClass(self))
@@ -57,32 +57,19 @@ class Maid(discord.Client):
     async def on_ready(self):
         await self.debug('Logged in as:\n{0} (ID: {0.id})'.format(self.user))
         await self.state.set_state('away')
+        
 
     async def on_message(self, message):
         if message.author == self.user:
             return
 
         if self.user.mentioned_in(message):
-            for mention_call in self.plugins.get_mentions():
-                await mention_call(message)
+            for mention in self.plugins.get_mentions():
+                await mention.mention_callback(message)
 
-            #else:
-            #    msg = 'Alguém me chamou? Como posso ser útil?'.format(message)
-            #    await self.send_message(message.channel, msg)
-
-        # for term in coffee.terms:
-        #     if term in message.content:
-        #         if coffee.is_empty():
-        #             msg = 'Já vou preparar, {0.author.mention}'.format(message)
-        #             asyncio.sleep(5)
-        #             await self.send_message(message.channel, msg)
-        #             coffee.make()
-                
-        #         asyncio.sleep(5)
-        #         coffee.consume()
-        #         msg = 'Aqui está o seu '+coffee.name+', {0.author.mention} :coffee:'.format(message)
-        #         await self.send_message(message.channel, msg)
-        #         break
+        else:
+            for message_plugin in self.plugins.get_messages():
+                await message_plugin.message_callback(message)
 
 
     async def debug(self, msg):

@@ -41,8 +41,6 @@ class ReminderPlugin(Plugin):
 
 
     def load(self):
-        self.mode = self.data.get('mode', False)
-        self.interval = self.data.get('interval', 30)
         self.reminder_dict = self.maid.loader.load_yml(self.data.get('data'))
         self.reminder_list = list()
 

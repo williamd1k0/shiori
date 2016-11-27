@@ -37,8 +37,6 @@ class MotivatePlugin(Plugin):
 
 
     def load(self):
-        self.mode = self.data.get('mode', False)
-        self.interval = self.data.get('interval', 20)
         self.motivate_list = self.maid.loader.load_list(self.data.get('data'))
 
 

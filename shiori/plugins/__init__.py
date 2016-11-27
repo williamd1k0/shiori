@@ -34,6 +34,7 @@ from .commands import CommandsPlugin
 from .reload_data import ReloadDataPlugin
 from .cleverbot import CleverPlugin
 from .wiki import WikiPlugin
+from .cafeteria import CafeteriaPlugin
 
 all_plugins = [
     PlayingJoojPlugin,
@@ -42,5 +43,6 @@ all_plugins = [
     ReloadDataPlugin,
     ReminderPlugin,
     CleverPlugin,
-    WikiPlugin
+    WikiPlugin,
+    CafeteriaPlugin
 ]
