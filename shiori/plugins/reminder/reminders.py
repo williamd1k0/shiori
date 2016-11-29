@@ -30,6 +30,7 @@ from datetime import datetime
 
 class Reminder(object):
 
+
     def __init__(self, week, hour, msg):
         self.week = week
         self.hour = hour
@@ -39,43 +40,48 @@ class Reminder(object):
 
 class ReminderTask(object):
 
+
     def __init__(self, time, rlist, x=1):
         self.stop = False
         self.time = time
-        self.reminders = None
-        self.now = None
         self.x = x
-        self.rdict = dict()
+        self.reminders = dict()
         for rem in rlist:
-            if not rem.week in self.rdict:
-                self.rdict[rem.week] = []
-            self.rdict[rem.week].append(rem)
-    
+            if not rem.week in self.reminders:
+                self.reminders[rem.week] = []
+            self.reminders[rem.week].append(rem)
+
+
     def has_reminder_today(self):
-        if date.today().isoweekday() in self.rdict:
-            self.reminders = self.rdict[date.today().isoweekday()]
+        if date.today().isoweekday() in self.reminders:
             return True
         return False
 
+    
+    def get_reminders_today(self):
+        return self.reminders[date.today().isoweekday()]
+
+
     def has_reminder_now(self):
-        now = []
-        for rem in self.reminders:
+        for rem in self.get_reminders_today():
             if rem.hour <= datetime.today().hour:
-                now.append(rem)
-        self.now = now
-        if len(now) > 0:
-            return True
+                return True
         return False
+
+
+    def get_reminders_now(self):
+        for rem in self.get_reminders_today():
+            if rem.hour <= datetime.today().hour:
+                yield rem
+
 
     async def reminder_task(self, callback):
         while not self.stop:
             if self.has_reminder_today():
                 if self.has_reminder_now():
-                    for rem in self.now:
+                    for rem in self.get_reminders_now():
                         if rem.x <= self.x:
                             rem.x += 1
                             await callback(rem)
             await asyncio.sleep(60*self.time)
         print('Reminder Done')
-        
-    

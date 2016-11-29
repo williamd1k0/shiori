@@ -36,13 +36,14 @@ from .cleverbot import CleverPlugin
 from .wiki import WikiPlugin
 from .cafeteria import CafeteriaPlugin
 
-all_plugins = [
-    PlayingJoojPlugin,
-    MotivatePlugin,
-    CommandsPlugin,
-    ReloadDataPlugin,
-    ReminderPlugin,
-    CleverPlugin,
-    WikiPlugin,
-    CafeteriaPlugin
-]
+
+def instance_all_plugins(maid):
+    yield PlayingJoojPlugin(maid)
+    yield MotivatePlugin(maid)
+    yield CommandsPlugin(maid)
+    yield ReloadDataPlugin(maid)
+    yield ReminderPlugin(maid)
+    yield CleverPlugin(maid)
+    yield WikiPlugin(maid)
+    yield CafeteriaPlugin(maid)
+

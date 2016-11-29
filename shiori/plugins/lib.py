@@ -112,30 +112,24 @@ class PluginManager(object):
 
 
     def get_job_plugins(self):
-        jobs = []
         for pl in self.plugins:
             if pl.mode:
                 if 'loop' in pl.types:
-                    jobs.append(pl)
-        return jobs
+                    yield pl
 
 
     def get_mentions(self):
-        mentions = []
         for pl in self.plugins:
             if pl.mode:
                 if 'mention' in pl.types:
-                    mentions.append(pl)
-        return mentions
+                    yield pl
 
 
     def get_messages(self):
-        msgs = []
         for pl in self.plugins:
             if pl.mode:
                 if 'message' in pl.types:
-                    msgs.append(pl)
-        return msgs
+                    yield pl
 
 
 class NotAPluginException(Exception):

@@ -28,7 +28,7 @@ import asyncio
 import discord
 from .utils import code_block
 from .states import State
-from .plugins import CmdTool, PluginManager, all_plugins
+from .plugins import CmdTool, PluginManager, instance_all_plugins
 
 
 class Maid(discord.Client):
@@ -45,10 +45,7 @@ class Maid(discord.Client):
         self.log = log
 
         self.cmdtool = CmdTool('!')
-        plugins = []
-        for PluginClass in all_plugins:
-            plugins.append(PluginClass(self))
-        self.plugins = PluginManager(plugins)
+        self.plugins = PluginManager(list(instance_all_plugins(self)))
 
 
     """
@@ -86,17 +83,19 @@ class Maid(discord.Client):
         await self.state.set_state('off')
         await self.play_game(None)
 
-    
+
     async def start_jobs(self):
         await self.state.set_state('on')
-    
+
 
     def get_job_plugins(self):
         return self.plugins.get_job_plugins()
-    
+
+
     def create_tasks(self):
         for job in self.get_job_plugins():
             job.tasks.append(self.loop.create_task(job.loop_callback()))
+
 
     async def say(self, chan, msg, wait=True):
         if self.state != 'off':
@@ -110,10 +109,9 @@ class Maid(discord.Client):
         if self.lobby is not None:
             await self.say(self.lobby, msg)
 
-    
+
     async def play_game(self, game_=None):
         if game_ is None:
             self.bot.change_presence(game=None)
         else:
             await self.bot.change_presence(game=discord.Game(name=game_))
-
