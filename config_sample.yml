@@ -1,0 +1,43 @@
+# Config sample for Shiori #
+############################
+# Save it as configs.yml   #
+############################
+
+# Discord
+discord:
+  token: "your bot token"
+  lobby: "your main channel id"
+
+# Plugins
+plugins:
+  debug:
+    mode: on
+  
+  reload_data:
+    mode: on
+    
+  motivate:
+    mode: off
+    interval: 25
+    data: motivate-phrases.txt
+    
+  playingjooj:
+    mode: on
+    interval: 15
+    data: games-list.txt
+    
+  cleverbot:
+    mode: on
+    
+  reminder:
+    mode: on
+    interval: 30
+    data: reminders.yml
+    
+  wiki:
+    mode: on
+    interval: 60
+    lang: en
+  
+  cafeteria:
+    mode: on
