@@ -24,8 +24,9 @@ SOFTWARE.
 """
 
 import asyncio
-from random import randint
+from ...utils import RandomPick
 from ...plugins import Plugin
+
 
 class MotivatePlugin(Plugin):
 
@@ -37,7 +38,7 @@ class MotivatePlugin(Plugin):
 
 
     def load(self):
-        self.motivate_list = self.maid.loader.load_list(self.data.get('data'))
+        self.motivate_list = RandomPick(self.maid.loader.load_list(self.data.get('data')))
 
 
     def update_data(self):
@@ -47,19 +48,13 @@ class MotivatePlugin(Plugin):
     async def loop_callback(self):
         await self.maid.bot.wait_until_ready()
         counter = 0
-        last_index = -1
-        index = -1
         while not self.maid.bot.is_closed and self.mode:
             await self.maid.debug("Work ping %s" % counter)
             await self.maid.debug("UP_TIME: {0}min, {1}s".format(*self.maid.uptime()))
             await self.maid.debug(self.maid.lobby)
 
             if self.maid.lobby is not None and self.maid.state != 'off':
-                while last_index == index:
-                    index = randint(0, len(self.motivate_list)-1)
-
-                last_index = index
-                msg = self.motivate_list[index]
+                msg = self.motivate_list.pick_one()
                 await self.maid.motivate(msg)
                 counter += 1
 

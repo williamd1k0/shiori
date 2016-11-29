@@ -23,7 +23,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+from random import randint
+
+
 def code_block(string, lang='') -> str:
     """Format a string using Markdown codeblock"""
     return "```{0}\n{1}\n```".format(lang, string)
-    
+
+
+class RandomPick(object):
+
+    def __init__(self, items):
+        self.items = items
+        self.last_index = -1
+        self.index = -1
+
+
+    def pick_one(self):
+        while self.last_index == self.index:
+            self.index = randint(0, len(self.items)-1)
+        self.last_index = self.index
+        return self.items[self.index]

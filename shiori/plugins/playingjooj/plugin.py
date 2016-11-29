@@ -24,7 +24,7 @@ SOFTWARE.
 """
 
 import asyncio
-from random import randint
+from ...utils import RandomPick
 from ...plugins import Plugin
 
 class PlayingJoojPlugin(Plugin):
@@ -37,7 +37,7 @@ class PlayingJoojPlugin(Plugin):
 
 
     def load(self):
-        self.presence_list = self.maid.loader.load_list(self.data.get('data'))
+        self.presence_list = RandomPick(self.maid.loader.load_list(self.data.get('data')))
 
 
     def update_data(self):
@@ -47,18 +47,12 @@ class PlayingJoojPlugin(Plugin):
     async def loop_callback(self):
         await self.maid.bot.wait_until_ready()
         counter = 0
-        last_index = -1
-        index = -1
         while not self.maid.bot.is_closed and self.mode:
             await self.maid.debug("Presence ping %s" % counter)
             await self.maid.debug("UP_TIME: {0}min, {1}s".format(*self.maid.uptime()))
 
             if self.maid.state != 'off':
-                while last_index == index:
-                    index = randint(0, len(self.presence_list)-1 )
-                last_index = index
-
-                game = self.presence_list[index]
+                game = self.presence_list.pick_one()
                 await self.maid.play_game(game)
                 counter += 1
 
