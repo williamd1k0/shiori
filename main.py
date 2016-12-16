@@ -25,8 +25,8 @@ SOFTWARE.
 """
 
 import sys
+import os
 import argparse
-import os.path, os.getenv
 from shiori import Maid, get_info
 from shiori import DataLoader, DataDownload
 from yaml import load as yaml_load
