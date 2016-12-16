@@ -26,13 +26,15 @@ SOFTWARE.
 
 import sys
 import argparse
-import os.path
+import os.path, os.getenv
 from shiori import Maid, get_info
 from shiori import DataLoader, DataDownload
 from yaml import load as yaml_load
 
 
 ARGS = None
+PATH = None
+URL_PREFIX = None
 SHIORI = None
 
 
@@ -47,12 +49,12 @@ class Shiori(object):
     url_prefix = None
 
 
-    def __init__(self, args):
-        self.data_path = args.path
+    def __init__(self, path, url_prefix=None):
+        self.data_path = path
         self.config_file = 'configs.yml'
         self.mode = 'local'
-        if args.url_prefix is not None:
-            self.url_prefix = args.url_prefix
+        if url_prefix is not None:
+            self.url_prefix = url_prefix
 
 
     def print_info(self):
@@ -104,15 +106,16 @@ def get_args():
 
 if __name__ == '__main__':
     ARGS = get_args()
-    SHIORI = Shiori(ARGS)
+    PATH = os.getenv('SHIORI_PATH', ARGS.path)
+    URL_PREFIX = os.getenv('SHIORI_URL_PREFIX', ARGS.url_prefix)
+    SHIORI = Shiori(PATH, URL_PREFIX)
 
     if ARGS.version:
         SHIORI.print_info()
-    if ARGS.remote:
+    if URL_PREFIX is not None:
         SHIORI.fetch_remote()
-        SHIORI.set_configs()
-    else:
-        SHIORI.set_configs()
+        
+    SHIORI.set_configs()
 
     try:
         SHIORI.start()
