@@ -44,3 +44,17 @@ class RandomPick(object):
             self.index = randint(0, len(self.items)-1)
         self.last_index = self.index
         return self.items[self.index]
+
+
+if __name__ == '__main__':
+    
+    print('TEST:', code_block)
+    print(code_block("Lorem ipsum dolor sit amet"))
+    print(code_block("Lorem ipsum dolor sit amet", "python"))
+    
+
+    print('TEST:', RandomPick)
+    mini_list = 'lorem', 'ipsum', 'dolor', 'sit', 'amet'
+    test_pick = RandomPick(mini_list)
+    for n in range(10):
+        print(test_pick.pick_one())
