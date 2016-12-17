@@ -71,9 +71,12 @@ class Maid(discord.Client):
 
 
     async def debug(self, msg):
-        print(msg)
-        if self.log is not None:
-            await self.say(self.log, code_block(msg, 'yaml'), False)
+        try:
+            if self.log is not None:
+                await self.say(self.log, code_block(msg, 'yaml'), False)
+            print(msg)
+        except UnicodeEncodeError as e:
+            print(e)
 
 
     def uptime(self):
