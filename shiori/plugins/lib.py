@@ -87,6 +87,10 @@ class Plugin(object):
         """Abstract callback for message plugins."""
         pass
 
+    async def self_message_callback(self, message):
+        """Abstract callback for self message plugins."""
+        pass
+
 
 class PluginManager(object):
 
@@ -129,6 +133,12 @@ class PluginManager(object):
         for pl in self.plugins:
             if pl.mode:
                 if 'message' in pl.types:
+                    yield pl
+    
+    def get_self_plugins(self):
+        for pl in self.plugins:
+            if pl.mode:
+                if 'self' in pl.types:
                     yield pl
 
 

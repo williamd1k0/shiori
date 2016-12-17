@@ -25,7 +25,7 @@ SOFTWARE.
 
 import asyncio
 from ...plugins import Plugin
-from .reminders import * 
+from .reminders import Reminder, ReminderTask
 
 class ReminderPlugin(Plugin):
 

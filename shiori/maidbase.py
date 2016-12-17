@@ -38,7 +38,7 @@ class Maid(discord.Client):
         super().__init__()
         self.bot = self # deprecated/legacy bot instance
         self.state = State(self)
-        self.start_t = time.time()
+        self.start_time = time.time()
         self.conf = conf
         self.loader = loader
         self.lobby = lobby
@@ -58,7 +58,8 @@ class Maid(discord.Client):
 
     async def on_message(self, message):
         if message.author == self.user:
-            return
+            for self_plugin in self.plugins.get_self_plugins():
+                await self_plugin.self_message_callback(message)
 
         if self.user.mentioned_in(message):
             for mention in self.plugins.get_mentions():
@@ -76,7 +77,9 @@ class Maid(discord.Client):
 
 
     def uptime(self):
-        return divmod(abs(time.time() - self.start_t), 60)
+        minutes, seconds = divmod(abs(time.time() - self.start_time), 60)
+        hours, minutes = divmod(minutes, 60)
+        return hours, minutes, seconds
 
 
     async def go_home(self):
