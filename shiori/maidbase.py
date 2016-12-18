@@ -82,7 +82,7 @@ class Maid(discord.Client):
     def uptime(self):
         minutes, seconds = divmod(abs(time.time() - self.start_time), 60)
         hours, minutes = divmod(minutes, 60)
-        return hours, minutes, seconds
+        return int(hours), int(minutes), int(seconds)
 
 
     async def go_home(self):
