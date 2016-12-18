@@ -66,8 +66,6 @@ class MotivatePlugin(Plugin):
             await asyncio.sleep(60*self.interval)
 
     async def self_message_callback(self, message):
-        await self.maid.debug(message.content)
-        await self.maid.debug(self.last_message_content)
         if message.content in self.last_message_content:
             self.last_message = message
         
