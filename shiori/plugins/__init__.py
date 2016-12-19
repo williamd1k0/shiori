@@ -35,6 +35,7 @@ from .reload_data import ReloadDataPlugin
 from .cleverbot import CleverPlugin
 from .wiki import WikiPlugin
 from .cafeteria import CafeteriaPlugin
+from .backup import BackupPlugin
 
 
 def instance_all_plugins(maid):
@@ -46,4 +47,5 @@ def instance_all_plugins(maid):
     yield CleverPlugin(maid)
     yield WikiPlugin(maid)
     yield CafeteriaPlugin(maid)
+    yield BackupPlugin(maid)
 

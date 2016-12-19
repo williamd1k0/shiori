@@ -1,4 +1,4 @@
-# Author: William Tumeo <http://github.com/williamd1k0>.
+
 """
 MIT License
 
@@ -23,19 +23,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from .utils import *
-from .plugins import *
-from .data import *
-from .states import State
-from .maidbase import Maid
+import asyncio
+from ...plugins import Plugin
 
 
-# Module info
-__app__ = "Shiori"
-__author__ = "William Tumeo <http://github.com/williamd1k0>"
-__version__ = 0, 15, 0
+class BackupPlugin(Plugin):
 
 
-def get_info():
-    """Return maid module version info."""
-    return "{0} v{1}.{2}.{3} by {4}".format(__app__, *__version__, __author__)
+    def __init__(self, maid):
+        super().__init__(maid, 'backup', ['loop'])
+
+
+    async def loop_callback(self):
+        await self.maid.wait_until_ready()
+        counter = 0
+        while not self.maid.is_closed and self.mode:
+            await self.maid.debug("Backup ping %s" % counter)
+            await self.maid.debug("UP_TIME: {0}:{1}:{2}".format(*self.maid.uptime()))
+
+            if self.maid.log is not None:
+                counter += 1
+                self.maid.data.backup_data()
+                await self.maid.send_file(self.maid.log, self.maid.data.backup.last_backup)
+
+            await asyncio.sleep(60*self.interval)

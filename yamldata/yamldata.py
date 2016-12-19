@@ -62,7 +62,7 @@ class ZipBackup(object):
             os.makedirs(self.backup_dir)
 
         count = len(os.listdir(self.backup_dir))
-        self.last_backup = os.path.join(self.backup_dir, "backup[{0}].zip".format(count))
+        self.last_backup = os.path.join(self.backup_dir, "backup-{0}.zip".format(count))
         zf = ZipFile(self.last_backup, "w")
         for dirname, subdirs, files in os.walk(self.path):
             zf.write(dirname)
