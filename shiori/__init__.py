@@ -33,7 +33,7 @@ from .maidbase import Maid
 # Module info
 __app__ = "Shiori"
 __author__ = "William Tumeo <http://github.com/williamd1k0>"
-__version__ = 0, 13, 0
+__version__ = 0, 13, 1
 
 
 def get_info():

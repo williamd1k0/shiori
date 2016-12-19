@@ -34,8 +34,7 @@ class MotivatePlugin(Plugin):
 
 
     def __init__(self, maid):
-        super().__init__(maid, 'motivate', ['loop', 'self'])
-        self.last_message_content = ''
+        super().__init__(maid, 'motivate', ['loop'])
         self.last_message = None
 
 
@@ -60,12 +59,7 @@ class MotivatePlugin(Plugin):
                 self.last_message_content = msg
                 if self.last_message is not None:
                     await self.maid.delete_message(self.last_message)
-                await self.maid.motivate(msg)
+                self.last_message = await self.maid.motivate(msg)
                 counter += 1
 
             await asyncio.sleep(60*self.interval)
-
-    async def self_message_callback(self, message):
-        if message.content in self.last_message_content:
-            self.last_message = message
-        

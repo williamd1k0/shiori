@@ -73,8 +73,9 @@ class Maid(discord.Client):
     async def debug(self, msg):
         try:
             if self.log is not None:
-                await self.say(self.log, code_block(msg, 'yaml'), False)
+                message = await self.say(self.log, code_block(msg, 'yaml'), False)
             print(msg)
+            return message
         except UnicodeEncodeError as e:
             print(e)
 
@@ -105,15 +106,15 @@ class Maid(discord.Client):
 
     async def say(self, chan, msg, wait=True):
         if self.state != 'off':
-            await self.bot.send_typing(chan)
+            await self.send_typing(chan)
             if wait:
                 await asyncio.sleep(1)
-            await self.bot.send_message(chan, msg)
+            return await self.send_message(chan, msg)
 
 
     async def motivate(self, msg):
         if self.lobby is not None:
-            await self.say(self.lobby, msg)
+            return await self.say(self.lobby, msg)
 
 
     async def play_game(self, game_=None):
