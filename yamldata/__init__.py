@@ -1,4 +1,4 @@
-# Author: William Tumeo <http://github.com/williamd1k0>.
+
 """
 MIT License
 
@@ -23,19 +23,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from .utils import *
-from .plugins import *
-from .data import *
-from .states import State
-from .maidbase import Maid
-
-
-# Module info
-__app__ = "Shiori"
-__author__ = "William Tumeo <http://github.com/williamd1k0>"
-__version__ = 0, 14, 0
-
-
-def get_info():
-    """Return maid module version info."""
-    return "{0} v{1}.{2}.{3} by {4}".format(__app__, *__version__, __author__)
+from .yamldata import YamlData, ZipBackup

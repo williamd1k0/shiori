@@ -31,21 +31,25 @@ from .states import State
 from .plugins import CmdTool, PluginManager, instance_all_plugins
 
 
+
 class Maid(discord.Client):
 
 
-    def __init__(self, conf, loader, lobby=None, log=None):
+    def __init__(self, conf, loader, data=None, lobby=None, log=None):
         super().__init__()
         self.bot = self # deprecated/legacy bot instance
         self.state = State(self)
         self.start_time = time.time()
         self.conf = conf
+        self.data = data
         self.loader = loader
         self.lobby = lobby
         self.log = log
 
         self.cmdtool = CmdTool('!')
         self.plugins = PluginManager(list(instance_all_plugins(self)))
+        # Backup init/test
+        self.data.backup_data()
 
 
     """

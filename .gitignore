@@ -93,3 +93,4 @@ ENV/
 
 # Shiori data
 data/
+.backup/

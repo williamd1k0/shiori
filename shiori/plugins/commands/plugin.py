@@ -60,6 +60,11 @@ class CommandsPlugin(Plugin):
         await self.maid.go_home()
 
 
+    async def _backup_callback(self, message):
+        self.maid.data.backup_data()
+        await self.maid.send_file(message.channel, self.maid.data.backup.last_backup)
+
+
     def load(self):
         self.terms['debug'] = 'log', 'debug'
         self.msg['debug'] = 'Jogando o lixo em {0.channel}'
@@ -72,6 +77,10 @@ class CommandsPlugin(Plugin):
         self.terms['sleep'] = 'bye', 'stop', 'sleep'
         self.msg['sleep'] = 'Tchau, até amanhã {0.author.mention}'
         self.callbacks['sleep'] = self._sleep_callback
+
+        self.terms['backup'] = 'backup', 'save'
+        self.msg['backup'] = '{0.author.mention}, aqui está seu backup!'
+        self.callbacks['backup'] = self._backup_callback
 
 
     async def mention_callback(self, message):

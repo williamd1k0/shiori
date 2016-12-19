@@ -30,6 +30,7 @@ import argparse
 from shiori import Maid, get_info
 from shiori import DataLoader, DataDownload
 from yaml import load as yaml_load
+from yamldata import YamlData
 
 
 ARGS = None
@@ -88,7 +89,8 @@ class Shiori(object):
 
     def start(self):
         """Start Shiori bot"""
-        self.maid = Maid(self.configs, DataLoader(self.configs, self.mode, self.data_path))
+        loader = DataLoader(self.configs, self.mode, self.data_path)
+        self.maid = Maid(self.configs, loader, YamlData(self.data_path))
         self.maid.create_tasks()
         self.maid.run(self.configs['discord']['token'])
 
