@@ -24,6 +24,8 @@ SOFTWARE.
 """
 
 import time
+from inspect import isgenerator
+
 
 class Plugin(object):
     """Base class for all plugins."""
@@ -115,31 +117,30 @@ class PluginManager(object):
                 pl.update_data()
 
 
-    def get_job_plugins(self):
+    def yield_pugins_by_type(self, type_):
         for pl in self.plugins:
             if pl.mode:
-                if 'loop' in pl.types:
+                if type_ in pl.types:
                     yield pl
 
+    def get_iterable(self, gen):
+        if isgenerator(gen):
+            return gen
+        else:
+            return []
+
+    def get_job_plugins(self):
+        return self.get_iterable(self.yield_pugins_by_type('loop'))
 
     def get_mentions(self):
-        for pl in self.plugins:
-            if pl.mode:
-                if 'mention' in pl.types:
-                    yield pl
-
+        return self.get_iterable(self.yield_pugins_by_type('mention'))
 
     def get_messages(self):
-        for pl in self.plugins:
-            if pl.mode:
-                if 'message' in pl.types:
-                    yield pl
+        return self.get_iterable(self.yield_pugins_by_type('message'))
     
     def get_self_plugins(self):
-        for pl in self.plugins:
-            if pl.mode:
-                if 'self' in pl.types:
-                    yield pl
+        return self.get_iterable(self.yield_pugins_by_type('self'))
+
 
 
 class NotAPluginException(Exception):
