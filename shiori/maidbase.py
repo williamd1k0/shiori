@@ -71,6 +71,7 @@ class Maid(discord.Client):
 
 
     async def debug(self, msg):
+        message = None
         try:
             if self.log is not None:
                 message = await self.say(self.log, code_block(msg, 'yaml'), False)
