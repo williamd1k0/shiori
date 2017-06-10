@@ -149,17 +149,18 @@ class NotAPluginException(Exception):
 
 class CmdTool(object):
 
-    def __init__(self, prefix='', case_sensitive=False):
+    def __init__(self, prefix=[''], case_sensitive=False):
         self.prefix = prefix
         self.case_sensitive = case_sensitive
 
 
     def has_command(self, cmd, msg):
-        if self.case_sensitive:
-            return self.prefix+cmd in msg.content
-        else:
-            return (self.prefix+cmd).lower() in msg.content.lower()
-    
+        for prefix in self.prefix:
+            if self.case_sensitive and prefix+cmd in msg.content:
+                return True
+            elif (prefix+cmd).lower() in msg.content.lower():
+                return True
+
     def has_commands(self, cmds, msg):
         for cmd in cmds:
             if self.has_command(cmd, msg):

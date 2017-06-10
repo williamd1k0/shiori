@@ -23,30 +23,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-# Base lib for plugins
-from .lib import Plugin, PluginManager, CmdTool
-
-# Register plugins
-from .reminder import ReminderPlugin
-from .playingjooj import PlayingJoojPlugin
-from .motivate import MotivatePlugin
-from .commands import CommandsPlugin
-from .reload_data import ReloadDataPlugin
-from .cleverbot import CleverPlugin
-from .wiki import WikiPlugin
-from .cafeteria import CafeteriaPlugin
-from .backup import BackupPlugin
-from .gitrepo import GitRepoPlugin
-
-
-def instance_all_plugins(maid):
-    yield PlayingJoojPlugin(maid)
-    yield MotivatePlugin(maid)
-    yield CommandsPlugin(maid)
-    yield ReloadDataPlugin(maid)
-    yield ReminderPlugin(maid)
-    yield CleverPlugin(maid)
-    yield WikiPlugin(maid)
-    yield CafeteriaPlugin(maid)
-    yield BackupPlugin(maid)
-    yield GitRepoPlugin(maid)
+from .plugin import GitRepoPlugin

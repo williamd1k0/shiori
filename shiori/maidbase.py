@@ -46,7 +46,7 @@ class Maid(discord.Client):
         self.lobby = lobby
         self.log = log
 
-        self.cmdtool = CmdTool('!')
+        self.cmdtool = CmdTool(['', '!'])
         self.plugins = PluginManager(list(instance_all_plugins(self)))
         # Backup init/test
         self.data.backup_data()
@@ -58,7 +58,7 @@ class Maid(discord.Client):
     async def on_ready(self):
         await self.debug('Logged in as:\n{0} (ID: {0.id})'.format(self.user))
         await self.state.set_state('away')
-        
+
 
     async def on_message(self, message):
         if message.author == self.user:
