@@ -36,7 +36,7 @@ class CleverPlugin(Plugin):
     def __init__(self, maid):
         super().__init__(maid, 'cleverbot', ['mention'])
         self.needs_reload = False
-        self.clever = Cleverbot()
+        self.clever = Cleverbot('shiori')
 
     def load(self):
         print("Cleverbot loaded.")
