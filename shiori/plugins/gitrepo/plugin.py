@@ -61,7 +61,7 @@ class GitRepo(object):
     def zip_branch(self, path=None, branch=None):
         if branch is None:
             branch = self.branch
-        path = os.path.join(self.path, '.git', branch+'.zip')
+        path = os.path.join(self.path, branch+'.zip')
         cmd = 'cd', self.path, '&&'
         cmd += 'git', 'archive', '--format', 'zip', '--output', path, branch
         subprocess.call(cmd, shell=True)
