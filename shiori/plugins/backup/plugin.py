@@ -38,8 +38,7 @@ class BackupPlugin(Plugin):
         await self.maid.wait_until_ready()
         counter = 0
         while not self.maid.is_closed and self.mode:
-            await self.maid.debug("Backup ping %s" % counter)
-            await self.maid.debug("UP_TIME: {0}:{1}:{2}".format(*self.maid.uptime()))
+            await self.debug("Backup ping %s" % counter)
 
             if self.maid.log is not None:
                 counter += 1

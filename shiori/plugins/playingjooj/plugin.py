@@ -48,8 +48,7 @@ class PlayingJoojPlugin(Plugin):
         await self.maid.bot.wait_until_ready()
         counter = 0
         while not self.maid.bot.is_closed and self.mode:
-            await self.maid.debug("Game ping %s" % counter)
-            await self.maid.debug("UP_TIME: {0}:{1}:{2}".format(*self.maid.uptime()))
+            await self.debug("Game ping %s" % counter)
 
             if self.maid.state != 'off':
                 game = self.presence_list.pick_one()

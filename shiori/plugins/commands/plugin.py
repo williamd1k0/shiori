@@ -41,7 +41,7 @@ class CommandsPlugin(Plugin):
 
     async def _debug_callback(self, message):
         self.maid.log = message.channel
-        await self.maid.debug(self.maid.log)
+        await self.debug(self.maid.log)
         if 'lobby' in self.maid.conf['discord']:
             await self._init_callback(message)
 
@@ -51,7 +51,7 @@ class CommandsPlugin(Plugin):
             self.maid.lobby = message.server.get_channel(str(self.maid.conf['discord']['lobby']))
         else:
             self.maid.lobby = message.channel
-        await self.maid.debug(self.maid.lobby)
+        await self.debug(self.maid.lobby)
         await self.maid.start_jobs()
 
 
@@ -67,7 +67,7 @@ class CommandsPlugin(Plugin):
 
     def load(self):
         self.terms['debug'] = 'log', 'debug'
-        self.msg['debug'] = 'Jogando o lixo em {0.channel}'
+        self.msg['debug'] = 'Jogando o lixo em `{0.channel}`'
         self.callbacks['debug'] = self._debug_callback
 
         self.terms['init'] = 'init', 'start', 'work'

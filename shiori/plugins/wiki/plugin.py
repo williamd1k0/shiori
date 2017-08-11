@@ -49,8 +49,7 @@ class WikiPlugin(Plugin):
         counter = 0
         print(self.mode)
         while not self.maid.is_closed and self.mode:
-            await self.maid.debug("Wiki ping %s" % counter)
-            await self.maid.debug("UP_TIME: {0}min, {1}s".format(*self.maid.uptime()))
+            await self.debug("Wiki ping %s" % counter)
             if self.maid.lobby is not None and self.maid.state != 'off':
                 self.page = wikipedia.page(wikipedia.random())
                 await self.maid.motivate(code_block(self.page.summary))

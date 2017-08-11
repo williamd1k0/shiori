@@ -52,6 +52,17 @@ class Plugin(object):
         return repr(self)
 
 
+    # Wrappers
+    async def say(self, chan, msg):
+        await self.maid.say(chan, msg)
+
+    async def debug(self, msg):
+        await self.maid.debug('{plugin}: {msg}'.format(
+            plugin=str(self),
+            msg=msg
+        ))
+
+
     def load(self):
         """Abstract load plugin."""
         pass

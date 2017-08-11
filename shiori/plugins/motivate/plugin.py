@@ -50,9 +50,8 @@ class MotivatePlugin(Plugin):
         await self.maid.bot.wait_until_ready()
         counter = 0
         while not self.maid.bot.is_closed and self.mode:
-            await self.maid.debug("Work ping %s" % counter)
-            await self.maid.debug("UP_TIME: {0}:{1}:{2}".format(*self.maid.uptime()))
-            await self.maid.debug(self.maid.lobby)
+            await self.debug("Work ping %s" % counter)
+            await self.debug(self.maid.lobby)
 
             if self.maid.lobby is not None and self.maid.state != 'off':
                 msg = self.motivate_list.pick_one()

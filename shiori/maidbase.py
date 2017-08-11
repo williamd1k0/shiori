@@ -76,9 +76,15 @@ class Maid(discord.Client):
 
     async def debug(self, msg):
         message = None
+        ltime = time.strftime('%d/%b-%H:%M:%S', time.localtime(time.time()))
+        fullmsg = '[%s]: {0}' % ltime
         try:
             if self.log is not None:
-                message = await self.say(self.log, code_block(msg, 'yaml'), False)
+                message = await self.say(
+                    self.log,
+                    code_block(fullmsg.format(msg), 'yaml'),
+                    False
+                )
             print(msg)
             return message
         except UnicodeEncodeError as e:
