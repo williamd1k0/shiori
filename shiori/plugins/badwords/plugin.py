@@ -23,32 +23,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-# Base lib for plugins
-from .lib import Plugin, PluginManager, CmdTool
-
-# Register plugins
-from .reminder import ReminderPlugin
-from .playingjooj import PlayingJoojPlugin
-from .motivate import MotivatePlugin
-from .commands import CommandsPlugin
-from .reload_data import ReloadDataPlugin
-from .cleverbot import CleverPlugin
-from .wiki import WikiPlugin
-from .cafeteria import CafeteriaPlugin
-from .backup import BackupPlugin
-from .gitrepo import GitRepoPlugin
-from .badwords import BadWordsPlugin
+from . import badwords
+from ...plugins import Plugin
 
 
-def instance_all_plugins(maid):
-    yield PlayingJoojPlugin(maid)
-    yield MotivatePlugin(maid)
-    yield CommandsPlugin(maid)
-    yield ReloadDataPlugin(maid)
-    yield ReminderPlugin(maid)
-    yield CleverPlugin(maid)
-    yield WikiPlugin(maid)
-    yield CafeteriaPlugin(maid)
-    yield BackupPlugin(maid)
-    yield GitRepoPlugin(maid)
-    yield BadWordsPlugin(maid)
+class BadWordsPlugin(Plugin):
+
+    terms = ['badword', 'badwords']
+    msg = None
+    re = None
+
+    def __init__(self, maid):
+        super().__init__(maid, 'badwords', ['mention'])
+        self.needs_reload = False
+
+    def load(self):
+        self.re = badwords.load_patterns()
+        print("Badwords loaded.")
+
+    async def mention_callback(self, message):
+        for term in self.terms:
+            if self.maid.cmdtool.has_command(term, message):
+                words = badwords.get_badwords(self.re, message.content.replace(term, ''))
+                if words:
+                    await self.maid.say(message.channel, 'Text contains bad words :rage::underage:')
+                else:
+                    await self.maid.say(message.channel, 'Text is safe :angel:')
+                break
