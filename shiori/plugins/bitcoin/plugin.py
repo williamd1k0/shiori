@@ -48,9 +48,9 @@ class BitcoinPlugin(Plugin):
         if prev is None:
             msg = msg.format(status='', btc=btc, diff='')
         elif btc > prev:
-            msg = msg.format(status=':chart_with_downwards_trend:', btc=btc, diff='(+%.2f)' % (btc-prev))
+            msg = msg.format(status=':chart_with_upwards_trend:', btc=btc, diff='(+%.2f)' % (btc-prev))
         elif btc < prev:
-            msg = msg.format(status=':chart_with_upwards_trend:', btc=btc, diff='(-%.2f)' % (prev-btc))
+            msg = msg.format(status=':chart_with_downwards_trend:', btc=btc, diff='(-%.2f)' % (prev-btc))
         else:
             msg = msg.format(status='', btc=btc, diff='')
         self.prev = btc
