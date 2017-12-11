@@ -43,14 +43,14 @@ class BitcoinPlugin(Plugin):
     async def get_bitcoin_price(self):
         data = urlopen('https://api.bitcointrade.com.br/v1/public/BTC/ticker').read()
         btc = float(json.loads(data.decode('utf-8'))['data']['last'])
-        msg = "{status} R$ {btc:.2f}{diff}"
+        msg = ":chart:{status} R$ {btc:.2f} {diff}"
         prev = self.prev
         if prev is None:
             msg = msg.format(status='', btc=btc, diff='')
         elif btc > prev:
-            msg = msg.format(status=':airplane_departure:', btc=btc, diff=' (+%.2f)' % (btc-prev))
+            msg = msg.format(status=':chart_with_downwards_trend:', btc=btc, diff='(+%.2f)' % (btc-prev))
         elif btc < prev:
-            msg = msg.format(status=':airplane_arriving:', btc=btc, diff=' (-%.2f)' % (prev-btc))
+            msg = msg.format(status=':chart_with_upwards_trend:', btc=btc, diff='(-%.2f)' % (prev-btc))
         else:
             msg = msg.format(status='', btc=btc, diff='')
         self.prev = btc
